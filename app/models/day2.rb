@@ -1,38 +1,42 @@
 class Day2
-  F = Rails.root.join('test/fixtures/files/day2.txt')
+  include FileName
 
-  def initialize
-    @data = File.open(F).each_line.map do |line|
-      line = line.chomp
-      (r, b) = line.split(':')
-      (r, l) = r.split(' ')
-      (min, max) = r.split('-')
+  def initialize(file: nil, file_ext: nil)
+    @data = load_data(file_name(file: file, file_ext: file_ext))
+  end
 
-      OpenStruct.new(
-        min: min.to_i,
-        max: max.to_i,
-        letter: l.strip,
-        password: b.strip
-      )
-    end
+  def load_data(file)
+    File.open(file).each_line.map(&:chomp).map {|l| l.split('x') }
   end
 
   def part1
-    remaining = @data.select do |d|
-      without = d.password.delete(d.letter)
-      count   = d.password.size - without.size
+    total = 0
 
-      count >= d.min && count <= d.max
+    @data.each do |dimensions|
+      smallest = nil
+      area     = 0
+
+      dimensions.combination(2).each do |a, b|
+        side = a.to_i * b.to_i
+        area += side
+        smallest = side if smallest.nil? || side < smallest
+      end
+
+      total += 2 * area + smallest
     end
 
-    remaining.size
+    total
   end
 
   def part2
-    remaining = @data.select do |d|
-      (d.password[d.min - 1] == d.letter) ^ (d.password[d.max - 1] == d.letter)
+    total = 0
+
+    @data.each do |dimensions|
+      sorted = dimensions.map(&:to_i).sort
+
+      total += 2 * (sorted[0] + sorted[1]) + sorted.reduce(&:*)
     end
 
-    remaining.size
+    total
   end
 end
