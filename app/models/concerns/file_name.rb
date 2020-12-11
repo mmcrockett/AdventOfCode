@@ -6,4 +6,8 @@ module FileName
 
     Rails.root.join("test/fixtures/files/#{fn}")
   end
+
+  def load_data(file)
+    File.open(file).each_line.map(&:chomp)
+  end
 end
