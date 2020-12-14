@@ -1,7 +1,5 @@
-module Y2020
+module Y2015
   class Day4
-    include FileName
-
     E0 = 'abcdef'
     E1 = 'pqrstuv'
     D  = 'bgvyzdsv'

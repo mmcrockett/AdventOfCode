@@ -1,4 +1,4 @@
-module Y2020
+module Y2015
   class Gate
     attr_reader :input, :output, :value
 
@@ -27,11 +27,9 @@ module Y2020
     end
 
     def resolve(input, value)
-      debugger if @output == 'w'
       @input = @input.map {|v| v == input ? value : v }
 
       if @input.all? {|v| Gate.integer_str?(v) }
-        debugger if @input.nil? || @func.nil?
         @value = self.send(@func, *@input.map(&:to_i))
       end
 

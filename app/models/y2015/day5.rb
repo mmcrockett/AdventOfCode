@@ -1,4 +1,4 @@
-module Y2020
+module Y2015
   class Day5
     include FileName
 

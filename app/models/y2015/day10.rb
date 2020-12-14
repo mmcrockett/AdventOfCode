@@ -1,5 +1,7 @@
-module Y2020
+module Y2015
   class Day10
+    INPUT = '1113122113'
+
     # 469694 too high
     def self.look_n_say(str)
       str     = str.chars if str.respond_to?(:chars)
@@ -31,7 +33,12 @@ module Y2020
       value
     end
 
+    def part1
+      Y2015::Day10.part1(value: INPUT, limit: 40)
+    end
+
     def part2
+      Y2015::Day10.part1(value: INPUT, limit: 50)
     end
   end
 end

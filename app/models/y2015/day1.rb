@@ -1,4 +1,4 @@
-module Y2020
+module Y2015
   class Day1
     #1769 too low
     include FileName

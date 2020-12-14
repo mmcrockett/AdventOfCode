@@ -25,7 +25,7 @@ class String
   end
 end
 
-module Y2020
+module Y2015
   class Day11
     INPUT = 'hxbxwxba'
 
@@ -35,6 +35,15 @@ module Y2020
       end
 
       str
+    end
+
+    def part1
+      Y2015::Day11.next_password(INPUT)
+    end
+
+    def part2
+      answer = Y2015::Day11.next_password(INPUT)
+      Y2015::Day11.next_password(answer.next)
     end
   end
 end
