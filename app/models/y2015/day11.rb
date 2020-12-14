@@ -24,15 +24,17 @@ class String
     trip_match && dup_match.size >= 2
   end
 end
-  
-class Day11
-  INPUT = 'hxbxwxba'
 
-  def self.next_password(str)
-    while false == str.advent_valid?
-      str = str.next
+module Y2020
+  class Day11
+    INPUT = 'hxbxwxba'
+
+    def self.next_password(str)
+      while false == str.advent_valid?
+        str = str.next
+      end
+
+      str
     end
-
-    str
   end
 end
