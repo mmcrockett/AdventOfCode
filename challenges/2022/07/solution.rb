@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Year2022
   class Day07 < Solution
     # @input is available if you need the raw data input
@@ -49,21 +50,21 @@ module Year2022
           if line.include?('cd')
             (_a, _b, where_to) = line.split
 
-            case where_to
-            when '/'
-              curr = home
-            when '..'
-              curr = curr.parent
-            else
-              curr = curr[where_to]
-            end
+            curr = case where_to
+                   when '/'
+                     home
+                   when '..'
+                     curr.parent
+                   else
+                     curr[where_to]
+                   end
           end
         else
           curr << line
         end
       end
 
-      while (false == directories.empty?)
+      while false == directories.empty?
         dir = directories.shift
         directories << dir.dirs.values
         directories.flatten!
@@ -84,21 +85,21 @@ module Year2022
           if line.include?('cd')
             (_a, _b, where_to) = line.split
 
-            case where_to
-            when '/'
-              curr = home
-            when '..'
-              curr = curr.parent
-            else
-              curr = curr[where_to]
-            end
+            curr = case where_to
+                   when '/'
+                     home
+                   when '..'
+                     curr.parent
+                   else
+                     curr[where_to]
+                   end
           end
         else
           curr << line
         end
       end
 
-      while (false == directories.empty?)
+      while false == directories.empty?
         dir = directories.shift
         directories << dir.dirs.values
         directories.flatten!
@@ -108,18 +109,17 @@ module Year2022
       used = TOTAL_DISK - home.size
       needed = NEEDED_DISK - used
 
-      sizes.sort.find {|size| size > needed }
+      sizes.sort.find { |size| size > needed }
     end
 
-    private
-      # Processes each line of the input file and stores the result in the dataset
-      # def process_input(line)
-      #   line.map(&:to_i)
-      # end
+    # Processes each line of the input file and stores the result in the dataset
+    # def process_input(line)
+    #   line.map(&:to_i)
+    # end
 
-      # Processes the dataset as a whole
-      # def process_dataset(set)
-      #   set
-      # end
+    # Processes the dataset as a whole
+    # def process_dataset(set)
+    #   set
+    # end
   end
 end
