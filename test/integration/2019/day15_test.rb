@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Day15Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
@@ -6,39 +6,39 @@ class Day15Test < ActiveSupport::TestCase
   let(:ec) { ElfComputer.new([], input_data, loop_mode: true) }
   let(:directions) {
     {
-      1 => [0,1],
-      2 => [0,-1],
-      3 => [-1,0],
-      4 => [1,0]
+      1 => [ 0, 1 ],
+      2 => [ 0, -1 ],
+      3 => [ -1, 0 ],
+      4 => [ 1, 0 ]
     }
   }
   let(:output) {
     {
-      0 => '#',
-      1 => '.',
-      2 => 'O'
+      0 => "#",
+      1 => ".",
+      2 => "O"
     }
   }
-  let(:start) { [50, 50] }
+  let(:start) { [ 50, 50 ] }
   let(:print_map) {
     ->(map, starting_x, ending_x, starting_y, ending_y) {
       (starting_y..ending_y).each do |y|
-        puts ''
+        puts ""
 
         (starting_x..ending_x).each do |x|
-          print map[y][x] || '#'
+          print map[y][x] || "#"
         end
       end
 
-      puts ''
+      puts ""
     }
   }
 
-  describe 'part 1' do
-    describe 'solution' do
+  describe "part 1" do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         @debug = false
         robot  = ec.dup
         answer = nil
@@ -47,18 +47,18 @@ class Day15Test < ActiveSupport::TestCase
         result = 1
         failsafe = 100000
         map[y]  ||= []
-        map[y][x] = 'B'
+        map[y][x] = "B"
         starting_y = y
         starting_x = x
         ending_y = y
         ending_x = x
 
         while answer.nil? && failsafe > 0
-          next_i = directions.find {|k,v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil?}
+          next_i = directions.find { |k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
 
-          if (next_i.nil?)
-            next_i = directions.find {|k,v| false == [output[0], 'X'].include?(map[y + v.last][x + v.first])}
-            map[y][x] = 'X'
+          if next_i.nil?
+            next_i = directions.find { |k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
+            map[y][x] = "X"
           end
 
           debugger if next_i.nil?
@@ -70,15 +70,15 @@ class Day15Test < ActiveSupport::TestCase
 
           map[next_y] ||= []
           map[next_y][next_x] ||= output[result]
-          #map[next_y][next_x] ||= 0
+          # map[next_y][next_x] ||= 0
 
-          if (0 != result)
+          if 0 != result
             x = next_x
             y = next_y
 
-            #map[next_y][next_x] += 1 unless [9, 'X'].include?(map[next_y][next_x])
+            # map[next_y][next_x] += 1 unless [9, 'X'].include?(map[next_y][next_x])
 
-            answer = [x,y] if result == 2
+            answer = [ x, y ] if result == 2
           end
 
           starting_x = x if starting_x > x
@@ -101,9 +101,9 @@ class Day15Test < ActiveSupport::TestCase
         (x, y)   = start
         answer_i = 0
 
-        while ('O' != map[y][x])
-          next_i = directions.find {|k,v| ['.', 'O'].include?(map[y + v.last][x + v.first])}
-          map[y][x] = 'z'
+        while "O" != map[y][x]
+          next_i = directions.find { |k, v| [ ".", "O" ].include?(map[y + v.last][x + v.first]) }
+          map[y][x] = "z"
 
           debugger if next_i.nil?
 
@@ -120,11 +120,11 @@ class Day15Test < ActiveSupport::TestCase
     end
   end
 
-  describe 'part 2' do
-    describe 'solution' do
+  describe "part 2" do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         @debug = nil
         robot  = ec.dup
         answer = nil
@@ -133,18 +133,18 @@ class Day15Test < ActiveSupport::TestCase
         result = 1
         failsafe = 100000
         map[y]  ||= []
-        map[y][x] = 'B'
+        map[y][x] = "B"
         starting_y = y
         starting_x = x
         ending_y = y
         ending_x = x
 
         while answer.nil? && failsafe > 0
-          next_i = directions.find {|k,v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil?}
+          next_i = directions.find { |k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
 
-          if (next_i.nil?)
-            next_i = directions.find {|k,v| false == [output[0], 'X'].include?(map[y + v.last][x + v.first])}
-            map[y][x] = 'X'
+          if next_i.nil?
+            next_i = directions.find { |k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
+            map[y][x] = "X"
           end
 
           debugger if next_i.nil?
@@ -156,15 +156,15 @@ class Day15Test < ActiveSupport::TestCase
 
           map[next_y] ||= []
           map[next_y][next_x] ||= output[result]
-          #map[next_y][next_x] ||= 0
+          # map[next_y][next_x] ||= 0
 
-          if (0 != result)
+          if 0 != result
             x = next_x
             y = next_y
 
-            #map[next_y][next_x] += 1 unless [9, 'X'].include?(map[next_y][next_x])
+            # map[next_y][next_x] += 1 unless [9, 'X'].include?(map[next_y][next_x])
 
-            answer = [x,y] if result == 2
+            answer = [ x, y ] if result == 2
           end
 
           starting_x = x if starting_x > x
@@ -186,7 +186,7 @@ class Day15Test < ActiveSupport::TestCase
 
         t = 0
         oxygen = {
-          t => [answer]
+          t => [ answer ]
         }
 
         while false == oxygen[t].empty?
@@ -194,10 +194,10 @@ class Day15Test < ActiveSupport::TestCase
 
           oxygen[next_t] ||= []
 
-          oxygen[t].each do |x,y|
-            map[y][x] = 'o'
+          oxygen[t].each do |x, y|
+            map[y][x] = "o"
 
-            directions.select {|k,v| false == ['#', nil, 'o'].include?(map[y + v.last][x + v.first])}.map {|k,v| [x + v.first, y + v.last] }.each do |next_oxygen|
+            directions.select { |k, v| false == [ "#", nil, "o" ].include?(map[y + v.last][x + v.first]) }.map { |k, v| [ x + v.first, y + v.last ] }.each do |next_oxygen|
               oxygen[next_t] << next_oxygen
             end
           end
@@ -215,6 +215,6 @@ class Day15Test < ActiveSupport::TestCase
     end
   end
 
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.chomp.split(',').map(&:to_i) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.chomp.split(",").map(&:to_i) }
 end

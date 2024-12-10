@@ -49,14 +49,14 @@ module Y2020
   end
 
   class Ship
-    LEFT  = 'L'.freeze
-    RIGHT = 'R'.freeze
-    FORWARD = 'F'.freeze
+    LEFT  = "L".freeze
+    RIGHT = "R".freeze
+    FORWARD = "F".freeze
 
-    NORTH = 'N'.freeze
-    SOUTH = 'S'.freeze
-    EAST  = 'E'.freeze
-    WEST  = 'W'.freeze
+    NORTH = "N".freeze
+    SOUTH = "S".freeze
+    EAST  = "E".freeze
+    WEST  = "W".freeze
 
     HEADINGS = [
       NORTH,
@@ -112,8 +112,8 @@ module Y2020
       raise "Error on match #{instruction}" if matcher.nil?
 
       OpenStruct.new(
-        command: matcher['command'],
-        value: matcher['value'].to_i
+        command: matcher["command"],
+        value: matcher["value"].to_i
       )
     end
 

@@ -4,9 +4,9 @@ class Computer
 
   alias :accumulator :acc
 
-  JMP = 'jmp'
-  ACC = 'acc'
-  NOP = 'nop'
+  JMP = "jmp"
+  ACC = "acc"
+  NOP = "nop"
 
   def initialize
     @acc  = 0
@@ -24,7 +24,7 @@ class Computer
   end
 
   def step
-    (instruction, value) = @code[@ip].strip.split(' ')
+    (instruction, value) = @code[@ip].strip.split(" ")
 
     case instruction
     when JMP

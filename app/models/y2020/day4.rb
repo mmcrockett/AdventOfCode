@@ -27,8 +27,8 @@ module Y2020
 
         next if line.blank?
 
-        line.split(' ').each do |kvpair|
-          (k, v) = kvpair.strip.split(':')
+        line.split(" ").each do |kvpair|
+          (k, v) = kvpair.strip.split(":")
 
           passports.last[k] = v.strip
         end
@@ -39,7 +39,7 @@ module Y2020
 
     def part1
       @data.select do |p|
-        REQUIRED_FIELDS.all? {|field| p[field] }
+        REQUIRED_FIELDS.all? { |field| p[field] }
       end
     end
 
@@ -55,10 +55,10 @@ module Y2020
         result = false unless p.pid.match?(/^\d{9}$/)
 
         if true == result
-          if p.hgt.end_with?('in')
+          if p.hgt.end_with?("in")
             h = p.hgt.to_i
             result = false unless h >= 59 && h <= 76
-          elsif p.hgt.end_with?('cm')
+          elsif p.hgt.end_with?("cm")
             h = p.hgt.to_i
             result = false unless h >= 150 && h <= 193
           else

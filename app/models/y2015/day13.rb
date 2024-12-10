@@ -8,12 +8,12 @@ module Y2015
 
     def parse(line)
       result = line.match(/(?<name0>\w+) would (?<direction>(gain|lose)) (?<value>\d+) happiness units by sitting next to (?<name1>\w+).*/)
-      value  = result['value'].to_i
-      value  = -value if 'lose' == result['direction']
+      value  = result["value"].to_i
+      value  = -value if "lose" == result["direction"]
 
       OpenStruct.new(
-        person0: result['name0'],
-        person1: result['name1'],
+        person0: result["name0"],
+        person1: result["name1"],
         value: value
       )
     end
@@ -24,7 +24,7 @@ module Y2015
 
       @data.each do |line|
         data = parse(line)
-        couple = [data.person0, data.person1].sort.join('_')
+        couple = [ data.person0, data.person1 ].sort.join("_")
         people << data.person0 << data.person1
         pairs[couple] ||= 0
         pairs[couple]  += data.value
@@ -38,7 +38,7 @@ module Y2015
           p1 = order[i]
           r  = nil
 
-          [p0, p1].permutation(2).find {|couple| r = pairs[couple.join('_')] }
+          [ p0, p1 ].permutation(2).find { |couple| r = pairs[couple.join("_")] }
 
           if r.nil?
             score  = BigDecimal::INFINITY
@@ -55,18 +55,18 @@ module Y2015
     def part2
       pairs  = {}
       people = Set.new
-      me     = 'Zimzam'
+      me     = "Zimzam"
 
       @data.each do |line|
         data = parse(line)
-        couple = [data.person0, data.person1].sort.join('_')
+        couple = [ data.person0, data.person1 ].sort.join("_")
         people << data.person0 << data.person1
         pairs[couple] ||= 0
         pairs[couple]  += data.value
       end
 
       people.each do |person|
-        couple = [person, me].join('_')
+        couple = [ person, me ].join("_")
         pairs[couple] = 0
       end
 
@@ -80,7 +80,7 @@ module Y2015
           p1 = order[i]
           r  = nil
 
-          [p0, p1].permutation(2).find {|couple| r = pairs[couple.join('_')] }
+          [ p0, p1 ].permutation(2).find { |couple| r = pairs[couple.join("_")] }
 
           if r.nil?
             score  = BigDecimal::INFINITY

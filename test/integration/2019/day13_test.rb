@@ -1,47 +1,47 @@
-require 'test_helper'
+require "test_helper"
 
 class Day13Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
 
-  describe 'part 1' do
-    describe 'solution' do
+  describe "part 1" do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         answer = ElfComputer.new([], input_data).run.output
         screen = {}
 
-        while (false == answer.empty?)
+        while false == answer.empty?
           (x, y, t) = answer.shift(3)
 
           screen["#{x}_#{y}"] = t
         end
 
-        assert_equal(412, screen.values.select {|v| 2 == v}.size)
+        assert_equal(412, screen.values.select { |v| 2 == v }.size)
       end
     end
   end
 
-  describe 'part 2' do
-    describe 'solution' do
+  describe "part 2" do
+    describe "solution" do
       let(:data) { puzzle }
       let(:free_play) { fp = input_data.dup; fp[0] = 2; fp }
       let(:ec) { ElfComputer.new([], free_play, no_input_mode: :break) }
       let(:show_display) { false }
 
-      it 'works' do
+      it "works" do
         screen = []
         move   = nil
         score  = 0
 
-        while (false == ec.halted?)
+        while false == ec.halted?
           ball_x   = nil
           paddle_x = nil
 
           ec.run if move.nil?
           ec.run(move) if move.present?
 
-          while (false == ec.output.empty?)
+          while false == ec.output.empty?
             (x, y, t) = ec.output.shift(3)
 
             if -1 == x && 0 == y
@@ -53,7 +53,7 @@ class Day13Test < ActiveSupport::TestCase
           end
 
           screen.each_with_index do |line, y|
-            puts '' if show_display
+            puts "" if show_display
 
             line.each_with_index do |v, x|
               print ElfComputer::GAME_OUTPUT.call(v) if show_display
@@ -77,6 +77,6 @@ class Day13Test < ActiveSupport::TestCase
     end
   end
 
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.chomp.split(',').map(&:to_i) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.chomp.split(",").map(&:to_i) }
 end

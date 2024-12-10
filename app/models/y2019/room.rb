@@ -11,11 +11,11 @@ class Room
   end
 
   def next
-    @visited.find {|k,v| false == v}.first
+    @visited.find { |k, v| false == v }.first
   end
 
   def next?
-    @visited.any? {|k,v| false == v}
+    @visited.any? { |k, v| false == v }
   end
 
   def visited!(direction)
@@ -33,8 +33,8 @@ class Room
   private
   def parse_room_data(data)
     @items   = []
-    @notes   = '?'
-    @name    = '?'
+    @notes   = "?"
+    @name    = "?"
     @visited = {}
 
     lines    = data.split("\n")
@@ -42,24 +42,24 @@ class Room
     while lines.any?
       line = lines.shift
 
-      if line.start_with?('== ')
-        @name  = line.gsub('==', '').strip
+      if line.start_with?("== ")
+        @name  = line.gsub("==", "").strip
         @notes = lines.shift.strip
-      elsif line.start_with?('Doors here lead')
-        line = lines.shift.gsub('-', '').strip
+      elsif line.start_with?("Doors here lead")
+        line = lines.shift.gsub("-", "").strip
 
         while line.present?
           @visited[line] = false
 
-          line = lines.shift.gsub('-', '').strip
+          line = lines.shift.gsub("-", "").strip
         end
-      elsif line.start_with?('Items here')
-        line = lines.shift.gsub('-', '').strip
+      elsif line.start_with?("Items here")
+        line = lines.shift.gsub("-", "").strip
 
         while line.present?
           @items << line
 
-          line = lines.shift.gsub('-', '').strip
+          line = lines.shift.gsub("-", "").strip
         end
       elsif line.start_with?("You can't go that way.")
         debugger

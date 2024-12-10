@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Day20Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
@@ -27,29 +27,29 @@ class Day20Test < ActiveSupport::TestCase
 
           if key.present?
             if portals.include?(key)
-              portals[key + 'x'] = Dijkstra::Node.new(key + 'x', x: x, y: y)
+              portals[key + "x"] = Dijkstra::Node.new(key + "x", x: x, y: y)
             else
               portals[key] = Dijkstra::Node.new(key, x: x, y: y)
             end
 
-            if ('AA' == key)
-              row << 'S'.ord
-            elsif ('ZZ' == key)
-              row << 'F'.ord
+            if "AA" == key
+              row << "S".ord
+            elsif "ZZ" == key
+              row << "F".ord
             else
-              row << 'P'.ord
+              row << "P".ord
             end
           else
             row << tile
           end
         else
-          row << '#'.ord
+          row << "#".ord
         end
 
         if top_left.empty? && tile.wall?
-          top_left = [x, y]
+          top_left = [ x, y ]
         elsif tile.wall?
-          bot_right = [x, y]
+          bot_right = [ x, y ]
         end
       end
 
@@ -57,7 +57,7 @@ class Day20Test < ActiveSupport::TestCase
     end
 
     portals.each do |k, v|
-      if ['AA', 'ZZ'].include?(k)
+      if [ "AA", "ZZ" ].include?(k)
         v.z = 0
       elsif v.x > top_left.first && v.y > top_left.last && v.x < bot_right.first && v.y < bot_right.last
         v.z = 1
@@ -66,7 +66,7 @@ class Day20Test < ActiveSupport::TestCase
       end
     end
 
-    return [portals, map]
+    [ portals, map ]
   end
 
   def bfs(portals, map)
@@ -76,119 +76,119 @@ class Day20Test < ActiveSupport::TestCase
       queue = [ node.coord ]
       distance = { node.coord => 0 }
 
-      while(false == queue.empty?)
+      while false == queue.empty?
         from_x, from_y = queue.shift
-        [[0, -1], [0, 1], [-1, 0], [1, 0]].each do |delta_x, delta_y|
+        [ [ 0, -1 ], [ 0, 1 ], [ -1, 0 ], [ 1, 0 ] ].each do |delta_x, delta_y|
           x = from_x + delta_x
           y = from_y + delta_y
-          pos  = [x,y]
+          pos  = [ x, y ]
           tile = map[y][x]
 
           next if tile.wall? || distance.include?(pos)
 
-          distance[pos] = distance[[from_x,from_y]] + 1
+          distance[pos] = distance[[ from_x, from_y ]] + 1
 
           if tile.portal?
-            other_node = portals.find {|k,v| v.coord == pos}.last
+            other_node = portals.find { |k, v| v.coord == pos }.last
 
             raise if other_node.nil?
 
-            edges << [node, other_node, distance[pos]]
+            edges << [ node, other_node, distance[pos] ]
           end
 
-          queue << [x, y]
+          queue << [ x, y ]
         end
       end
     end
 
-    return edges
+    edges
   end
 
-  describe 'part 1' do
+  describe "part 1" do
     let(:answer) {
       (portals, map) = parse_map(input_data)
       edges  = bfs(portals, map)
-      portals.values.group_by {|node| node.name.delete('x')}.each {|pairs| edges << [pairs.last[0], pairs.last[1], 1] if 2 == pairs.last.size }
-      edges.each {|n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
+      portals.values.group_by { |node| node.name.delete("x") }.each { |pairs| edges << [ pairs.last[0], pairs.last[1], 1 ] if 2 == pairs.last.size }
+      edges.each { |n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
 
-      Dijkstra::ShortestPath.new(portals.values, portals['AA']).shortest_distance_to(portals['ZZ'])
+      Dijkstra::ShortestPath.new(portals.values, portals["AA"]).shortest_distance_to(portals["ZZ"])
     }
 
-    describe 'example 0' do
+    describe "example 0" do
       let(:data) { p1_e0 }
 
-      it 'works' do
+      it "works" do
         assert_equal(23, answer)
       end
     end
 
-    describe 'example 1' do
+    describe "example 1" do
       let(:data) { p1_e1 }
 
-      it 'works' do
+      it "works" do
         assert_equal(58, answer)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert_equal(676, answer)
       end
     end
   end
 
-  describe 'part 2' do
+  describe "part 2" do
     def bfs2(portals, map)
-      start  = portals.delete('AA')
-      finish = portals.delete('ZZ')
+      start  = portals.delete("AA")
+      finish = portals.delete("ZZ")
       paths  = []
 
       (start + portals.values).each do |node|
         queue = [ node.coord ]
         distance = { node.coord => 0 }
 
-        while (false == queue.empty?)
+        while false == queue.empty?
           from_x, from_y = queue.shift
 
-          [[0, -1], [0, 1], [-1, 0], [1, 0]].each do |delta_x, delta_y|
+          [ [ 0, -1 ], [ 0, 1 ], [ -1, 0 ], [ 1, 0 ] ].each do |delta_x, delta_y|
             x = from_x + delta_x
             y = from_y + delta_y
-            pos  = [x,y]
+            pos  = [ x, y ]
             tile = map[y][x]
 
             next if tile.wall? || distance.include?(pos)
 
-            distance[pos] = distance[[from_x,from_y]] + 1
+            distance[pos] = distance[[ from_x, from_y ]] + 1
 
             if tile.portal?
-              other_node = portals.find {|k,v| v.coord == pos}.last
+              other_node = portals.find { |k, v| v.coord == pos }.last
 
               raise if other_node.nil?
 
-              edges << [node, other_node, distance[pos]]
+              edges << [ node, other_node, distance[pos] ]
             end
 
-            queue << [x, y]
+            queue << [ x, y ]
           end
         end
       end
 
-      return edges
+      edges
     end
 
     let(:answer) {
       (portals, map) = parse_map(input_data)
       edges  = bfs(portals, map)
-      portals.values.group_by {|node| node.name.delete('x')}.each {|pairs| edges << [pairs.last[0], pairs.last[1], 1] if 2 == pairs.last.size }
-      edges.each {|n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
+      portals.values.group_by { |node| node.name.delete("x") }.each { |pairs| edges << [ pairs.last[0], pairs.last[1], 1 ] if 2 == pairs.last.size }
+      edges.each { |n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
 
       p = []
       counts = {}
 
-      start  = portals['AA']
-      finish = portals['ZZ']
+      start  = portals["AA"]
+      finish = portals["ZZ"]
       queue  = []
       found  = {}
 
@@ -202,28 +202,28 @@ class Day20Test < ActiveSupport::TestCase
       11
     }
 
-    describe 'p1 example' do
+    describe "p1 example" do
       let(:data) { p1_e0 }
 
-      it 'works' do
+      it "works" do
         skip
         assert_equal(26, answer)
       end
     end
 
-    describe 'example 0' do
+    describe "example 0" do
       let(:data) { p2_e0 }
 
-      it 'works' do
+      it "works" do
         skip
         assert_equal(396, answer)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         skip
       end
     end
@@ -231,110 +231,110 @@ class Day20Test < ActiveSupport::TestCase
 
   let(:p1_e0) {
     <<-STR
-         A           
-         A           
-  #######.#########  
-  #######.........#  
-  #######.#######.#  
-  #######.#######.#  
-  #######.#######.#  
-  #####  B    ###.#  
-BC...##  C    ###.#  
-  ##.##       ###.#  
-  ##...DE  F  ###.#  
-  #####    G  ###.#  
-  #########.#####.#  
-DE..#######...###.#  
-  #.#########.###.#  
-FG..#########.....#  
-  ###########.#####  
-             Z       
-             Z      
+         A#{'           '}
+         A#{'           '}
+  #######.##########{'  '}
+  #######.........##{'  '}
+  #######.#######.##{'  '}
+  #######.#######.##{'  '}
+  #######.#######.##{'  '}
+  #####  B    ###.##{'  '}
+BC...##  C    ###.##{'  '}
+  ##.##       ###.##{'  '}
+  ##...DE  F  ###.##{'  '}
+  #####    G  ###.##{'  '}
+  #########.#####.##{'  '}
+DE..#######...###.##{'  '}
+  #.#########.###.##{'  '}
+FG..#########.....##{'  '}
+  ###########.######{'  '}
+             Z#{'       '}
+             Z#{'      '}
     STR
   }
 
   let(:p1_e1) {
     <<-STR
-                   A               
-                   A               
-  #################.#############  
-  #.#...#...................#.#.#  
-  #.#.#.###.###.###.#########.#.#  
-  #.#.#.......#...#.....#.#.#...#  
-  #.#########.###.#####.#.#.###.#  
-  #.............#.#.....#.......#  
-  ###.###########.###.#####.#.#.#  
-  #.....#        A   C    #.#.#.#  
-  #######        S   P    #####.#  
+                   A#{'               '}
+                   A#{'               '}
+  #################.##############{'  '}
+  #.#...#...................#.#.##{'  '}
+  #.#.#.###.###.###.#########.#.##{'  '}
+  #.#.#.......#...#.....#.#.#...##{'  '}
+  #.#########.###.#####.#.#.###.##{'  '}
+  #.............#.#.....#.......##{'  '}
+  ###.###########.###.#####.#.#.##{'  '}
+  #.....#        A   C    #.#.#.##{'  '}
+  #######        S   P    #####.##{'  '}
   #.#...#                 #......VT
-  #.#.#.#                 #.#####  
-  #...#.#               YN....#.#  
-  #.###.#                 #####.#  
-DI....#.#                 #.....#  
-  #####.#                 #.###.#  
+  #.#.#.#                 #.######{'  '}
+  #...#.#               YN....#.##{'  '}
+  #.###.#                 #####.##{'  '}
+DI....#.#                 #.....##{'  '}
+  #####.#                 #.###.##{'  '}
 ZZ......#               QG....#..AS
-  ###.###                 #######  
-JO..#.#.#                 #.....#  
-  #.#.#.#                 ###.#.#  
+  ###.###                 ########{'  '}
+JO..#.#.#                 #.....##{'  '}
+  #.#.#.#                 ###.#.##{'  '}
   #...#..DI             BU....#..LF
-  #####.#                 #.#####  
+  #####.#                 #.######{'  '}
 YN......#               VT..#....QG
-  #.###.#                 #.###.#  
-  #.#...#                 #.....#  
-  ###.###    J L     J    #.#.###  
-  #.....#    O F     P    #.#...#  
-  #.###.#####.#.#####.#####.###.#  
-  #...#.#.#...#.....#.....#.#...#  
-  #.#####.###.###.#.#.#########.#  
-  #...#.#.....#...#.#.#.#.....#.#  
-  #.###.#####.###.###.#.#.#######  
-  #.#.........#...#.............#  
-  #########.###.###.#############  
-           B   J   C               
-           U   P   P               
+  #.###.#                 #.###.##{'  '}
+  #.#...#                 #.....##{'  '}
+  ###.###    J L     J    #.#.####{'  '}
+  #.....#    O F     P    #.#...##{'  '}
+  #.###.#####.#.#####.#####.###.##{'  '}
+  #...#.#.#...#.....#.....#.#...##{'  '}
+  #.#####.###.###.#.#.#########.##{'  '}
+  #...#.#.....#...#.#.#.#.....#.##{'  '}
+  #.###.#####.###.###.#.#.########{'  '}
+  #.#.........#...#.............##{'  '}
+  #########.###.###.##############{'  '}
+           B   J   C#{'               '}
+           U   P   P#{'               '}
     STR
   }
   let(:p2_e0) {
     <<-STR
-             Z L X W       C                 
-             Z P Q B       K                 
-  ###########.#.#.#.#######.###############  
-  #...#.......#.#.......#.#.......#.#.#...#  
-  ###.#.#.#.#.#.#.#.###.#.#.#######.#.#.###  
-  #.#...#.#.#...#.#.#...#...#...#.#.......#  
-  #.###.#######.###.###.#.###.###.#.#######  
-  #...#.......#.#...#...#.............#...#  
-  #.#########.#######.#.#######.#######.###  
-  #...#.#    F       R I       Z    #.#.#.#  
-  #.###.#    D       E C       H    #.#.#.#  
-  #.#...#                           #...#.#  
-  #.###.#                           #.###.#  
+             Z L X W       C#{'                 '}
+             Z P Q B       K#{'                 '}
+  ###########.#.#.#.#######.################{'  '}
+  #...#.......#.#.......#.#.......#.#.#...##{'  '}
+  ###.#.#.#.#.#.#.#.###.#.#.#######.#.#.####{'  '}
+  #.#...#.#.#...#.#.#...#...#...#.#.......##{'  '}
+  #.###.#######.###.###.#.###.###.#.########{'  '}
+  #...#.......#.#...#...#.............#...##{'  '}
+  #.#########.#######.#.#######.#######.####{'  '}
+  #...#.#    F       R I       Z    #.#.#.##{'  '}
+  #.###.#    D       E C       H    #.#.#.##{'  '}
+  #.#...#                           #...#.##{'  '}
+  #.###.#                           #.###.##{'  '}
   #.#....OA                       WB..#.#..ZH
-  #.###.#                           #.#.#.#  
-CJ......#                           #.....#  
-  #######                           #######  
+  #.###.#                           #.#.#.##{'  '}
+CJ......#                           #.....##{'  '}
+  #######                           ########{'  '}
   #.#....CK                         #......IC
-  #.###.#                           #.###.#  
-  #.....#                           #...#.#  
-  ###.###                           #.#.#.#  
-XF....#.#                         RF..#.#.#  
-  #####.#                           #######  
-  #......CJ                       NM..#...#  
-  ###.#.#                           #.###.#  
+  #.###.#                           #.###.##{'  '}
+  #.....#                           #...#.##{'  '}
+  ###.###                           #.#.#.##{'  '}
+XF....#.#                         RF..#.#.##{'  '}
+  #####.#                           ########{'  '}
+  #......CJ                       NM..#...##{'  '}
+  ###.#.#                           #.###.##{'  '}
 RE....#.#                           #......RF
-  ###.###        X   X       L      #.#.#.#  
-  #.....#        F   Q       P      #.#.#.#  
-  ###.###########.###.#######.#########.###  
-  #.....#...#.....#.......#...#.....#.#...#  
-  #####.#.###.#######.#######.###.###.#.#.#  
-  #.......#.......#.#.#.#.#...#...#...#.#.#  
-  #####.###.#####.#.#.#.#.###.###.#.###.###  
-  #.......#.....#.#...#...............#...#  
-  #############.#.#.###.###################  
-               A O F   N                     
-               A A D   M                     
+  ###.###        X   X       L      #.#.#.##{'  '}
+  #.....#        F   Q       P      #.#.#.##{'  '}
+  ###.###########.###.#######.#########.####{'  '}
+  #.....#...#.....#.......#...#.....#.#...##{'  '}
+  #####.#.###.#######.#######.###.###.#.#.##{'  '}
+  #.......#.......#.#.#.#.#...#...#...#.#.##{'  '}
+  #####.###.#####.#.#.#.#.###.###.#.###.####{'  '}
+  #.......#.....#.#...#...............#...##{'  '}
+  #############.#.#.###.####################{'  '}
+               A O F   N#{'                     '}
+               A A D   M#{'                     '}
   STR
   }
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.lines.map {|line| line.chomp.chars.map(&:ord) } }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.lines.map { |line| line.chomp.chars.map(&:ord) } }
 end

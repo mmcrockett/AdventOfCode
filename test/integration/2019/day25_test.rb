@@ -1,25 +1,24 @@
-require 'test_helper'
-require 'highline/import'
+require "test_helper"
+require "highline/import"
 
 class Day25Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
 
-  describe 'part 1' do
-    describe 'solution' do
+  describe "part 1" do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'probes' do
+      it "probes" do
         rooms = {}
         passcode = nil
         bad_items = [
-          'giant electromagnet',
-          'photons',
-          'infinite loop',
-          'molten lava',
-          'escape pod'
+          "giant electromagnet",
+          "photons",
+          "infinite loop",
+          "molten lava",
+          "escape pod"
         ]
-        items = [
-        ]
+        items = []
         ec    = ElfComputer.new([], input_data, no_input_mode: :break).run
         depth = 0
         next_command = nil
@@ -60,15 +59,15 @@ class Day25Test < ActiveSupport::TestCase
           ec.run(next_command.to_elfcommand)
         end
 
-        %w(south south west north north north).each {|command| ec.run(command.to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
-        items.each {|item| ec.run("drop #{item}".to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
+        %w[south south west north north north].each { |command| ec.run(command.to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
+        items.each { |item| ec.run("drop #{item}".to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
 
         items.dup.each do |item|
-          ["take #{item}", "east", "drop #{item}"].each do |c|
+          [ "take #{item}", "east", "drop #{item}" ].each do |c|
             ec.run(c.to_elfcommand)
             result = ec.ascii_output
 
-            if result.include?('Droids on this ship are lighter than the detected value')
+            if result.include?("Droids on this ship are lighter than the detected value")
               items.delete(item)
             end
 
@@ -80,7 +79,7 @@ class Day25Test < ActiveSupport::TestCase
           break if passcode.present?
           items.permutation(n) do |items|
             break if passcode.present?
-            commands = items.map {|item| ["take #{item}", "drop #{item}"]}.flatten.sort.reverse
+            commands = items.map { |item| [ "take #{item}", "drop #{item}" ] }.flatten.sort.reverse
             commands.insert(items.size, "east")
 
             commands.each do |c|
@@ -88,9 +87,9 @@ class Day25Test < ActiveSupport::TestCase
               result = ec.ascii_output
 
               if "east" == c
-                if result.include?('Droids on this ship are heavier than the detected value')
+                if result.include?("Droids on this ship are heavier than the detected value")
                   Rails.logger.info("VVVVVVVVVV #{items}")
-                elsif false == result.include?('Security Checkpoint')
+                elsif false == result.include?("Security Checkpoint")
                   passcode = result.match(/\d+/)[0]
                   break
                 end
@@ -105,7 +104,7 @@ class Day25Test < ActiveSupport::TestCase
 
         while hc.present? && passcode.nil?
           puts "#{ec.ascii_output}" if debug_p
-          hc = ask('command: ')
+          hc = ask("command: ")
           ec.run(hc.to_elfcommand)
         end
 
@@ -115,17 +114,17 @@ class Day25Test < ActiveSupport::TestCase
     end
   end
 
-  describe 'part 2' do
-    describe 'solution' do
+  describe "part 2" do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         skip
         assert_equal(1139528802, answer)
       end
     end
   end
 
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.chomp.split(',').map(&:to_i) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.chomp.split(",").map(&:to_i) }
 end

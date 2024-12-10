@@ -15,53 +15,53 @@ module Y2015
     end
 
     def part1
-      location = [0,0]
-      presents = { location.join('_') => 1 }
+      location = [ 0, 0 ]
+      presents = { location.join("_") => 1 }
 
       @data.chars.each do |direction|
         case direction
-        when '>'
+        when ">"
           location[0] += 1
-        when '<'
+        when "<"
           location[0] -= 1
-        when '^'
+        when "^"
           location[1] += 1
-        when 'v'
+        when "v"
           location[1] -= 1
         else
           raise "!ERROR: #{direction}"
         end
 
-        presents[location.join('_')] ||= 0
-        presents[location.join('_')]  += 1
+        presents[location.join("_")] ||= 0
+        presents[location.join("_")]  += 1
       end
 
       presents
     end
 
     def part2
-      slocation = [0,0]
-      rlocation = [0,0]
-      presents = { slocation.join('_') => 2 }
+      slocation = [ 0, 0 ]
+      rlocation = [ 0, 0 ]
+      presents = { slocation.join("_") => 2 }
 
       @data.chars.each_with_index do |direction, i|
         loc = i.even? ? slocation : rlocation
 
         case direction
-        when '>'
+        when ">"
           add_to(loc, 0, 1)
-        when '<'
+        when "<"
           add_to(loc, 0, -1)
-        when '^'
+        when "^"
           add_to(loc, 1, 1)
-        when 'v'
+        when "v"
           add_to(loc, 1, -1)
         else
           raise "!ERROR: #{direction}"
         end
 
-        presents[loc.join('_')] ||= 0
-        presents[loc.join('_')]  += 1
+        presents[loc.join("_")] ||= 0
+        presents[loc.join("_")]  += 1
       end
 
       presents

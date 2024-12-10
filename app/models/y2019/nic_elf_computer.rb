@@ -58,7 +58,7 @@ class NicElfComputer
   def run
     running = true
 
-    while (@index < @max && @code[@index] != 99 && true == running)
+    while @index < @max && @code[@index] != 99 && true == running
       opcode_data = PARSEOP.call(@code[@index].to_s)
       opcode = opcode_data[:opcode]
       iplus  = 4
@@ -68,12 +68,12 @@ class NicElfComputer
       v1     = @code[a1].to_i
       v2     = @code[a2].to_i
 
-      if (1 == opcode || 2 == opcode)
+      if 1 == opcode || 2 == opcode
         val  = v1 + v2 if 1 == opcode
         val  = v1 * v2 if 2 == opcode
 
         @code[a3] = val
-      elsif (3 == opcode || 4 == opcode)
+      elsif 3 == opcode || 4 == opcode
         iplus = 2
 
         if 3 == opcode
@@ -81,20 +81,20 @@ class NicElfComputer
         else
           self << v1
         end
-      elsif (5 == opcode || 6 == opcode)
+      elsif 5 == opcode || 6 == opcode
         if (0 == v1) && (6 == opcode) || (0 != v1) && (5 == opcode)
           iplus = 0
           @index = v2
         else
           iplus  = 3
         end
-      elsif (7 == opcode || 8 == opcode)
+      elsif 7 == opcode || 8 == opcode
         if (7 == opcode && v1 < v2) || (8 == opcode && v1 == v2)
           @code[a3] = 1
         else
           @code[a3] = 0
         end
-      elsif (9 == opcode)
+      elsif 9 == opcode
         iplus  = 2
         @rindex += v1
       else
@@ -104,18 +104,18 @@ class NicElfComputer
       @index += iplus
     end
 
-    return self
+    self
   end
 
   def addr(i, mode)
     idx    = @index + i
 
     if 1 == mode
-      return idx
+      idx
     elsif 2 == mode
-      return @rindex + @code[idx]
+      @rindex + @code[idx]
     else
-      return @code[idx]
+      @code[idx]
     end
   end
 end

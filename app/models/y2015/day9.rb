@@ -4,7 +4,7 @@ module Y2015
     include FileName
 
     def initialize(file: nil, file_ext: nil)
-      @raw_data = load_data(file_name(file: file, file_ext: file_ext)).map {|v| parse(v) }
+      @raw_data = load_data(file_name(file: file, file_ext: file_ext)).map { |v| parse(v) }
     end
 
     def parse(line)
@@ -22,7 +22,7 @@ module Y2015
       min_value = BigDecimal::INFINITY
 
       @raw_data.each do |data|
-        [data.a, data.b].each {|name| cities[name] ||= Node.new(name) }
+        [ data.a, data.b ].each { |name| cities[name] ||= Node.new(name) }
 
         connections << Edge.new(from: cities[data.a], to: cities[data.b], value: data.d)
       end
@@ -32,7 +32,7 @@ module Y2015
           city_a = order[j - 1]
           city_b = order[j]
 
-          found_edge = connections.find {|edge| edge.include?(city_a) && edge.include?(city_b) }
+          found_edge = connections.find { |edge| edge.include?(city_a) && edge.include?(city_b) }
 
           found_edge.nil? ? BigDecimal::INFINITY : found_edge.weight
         end.sum
@@ -45,7 +45,7 @@ module Y2015
       min_value = BigDecimal::INFINITY
 
       @raw_data.each do |data|
-        [data.a, data.b].each {|name| cities[name] ||= Node.new(name) }
+        [ data.a, data.b ].each { |name| cities[name] ||= Node.new(name) }
 
         connections << Edge.new(from: cities[data.a], to: cities[data.b], value: data.d)
       end
@@ -55,7 +55,7 @@ module Y2015
           city_a = order[j - 1]
           city_b = order[j]
 
-          found_edge = connections.find {|edge| edge.include?(city_a) && edge.include?(city_b) }
+          found_edge = connections.find { |edge| edge.include?(city_a) && edge.include?(city_b) }
 
           found_edge.nil? ? BigDecimal::INFINITY : found_edge.weight
         end.sum

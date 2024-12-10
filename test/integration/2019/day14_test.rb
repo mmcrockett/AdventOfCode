@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Day14Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
@@ -13,23 +13,22 @@ class Day14Test < ActiveSupport::TestCase
       end
 
       needed    = {
-        'FUEL' => fuel_needed
+        "FUEL" => fuel_needed
       }
-      in_stock = {
-      }
+      in_stock = {}
       ores = []
-      simple    = input_data.select {|k,v| 1 == v.size && 'ORE' != v.first.name}.map {|k,v| k.name}
-      elemental = input_data.select {|k,v| 'ORE' == v.first.name}.map {|k,v| k.name}
+      simple    = input_data.select { |k, v| 1 == v.size && "ORE" != v.first.name }.map { |k, v| k.name }
+      elemental = input_data.select { |k, v| "ORE" == v.first.name }.map { |k, v| k.name }
 
-      puts '' if @debug
+      puts "" if @debug
 
-      while false == needed.reject {|k,v| 'ORE' == k}.empty?
-        needed = Hash[needed.sort_by {|k,v| (elemental.include?(k) ? 100 : 0) + (simple.include?(k) ? 10 : 0) + inputs_remaining[k].to_i }]
+      while false == needed.reject { |k, v| "ORE" == k }.empty?
+        needed = Hash[needed.sort_by { |k, v| (elemental.include?(k) ? 100 : 0) + (simple.include?(k) ? 10 : 0) + inputs_remaining[k].to_i }]
         need = needed.shift
 
         puts "Need '#{need}'" if @debug
 
-        output = input_data.select {|k,v| need.first == k.name }
+        output = input_data.select { |k, v| need.first == k.name }
 
         if 1 != output.size
           raise "Wrong number found '#{need}' '#{output}'"
@@ -38,13 +37,13 @@ class Day14Test < ActiveSupport::TestCase
         puts "\tFound '#{output.keys}'" if @debug
         puts "\t\tIt needs '#{need.last}' * '#{output.values}'" if @debug
 
-        output.each do |k,v|
+        output.each do |k, v|
           output_amt_multiple = ((need.last - in_stock[need.first].to_i).to_f / k.count).ceil
 
           v.each do |input|
             input_amt = output_amt_multiple * input.count
 
-            if ('ORE' == input.name)
+            if "ORE" == input.name
               ores << input_amt
             else
               needed[input.name] ||= 0
@@ -56,7 +55,7 @@ class Day14Test < ActiveSupport::TestCase
           in_stock[need.first]  += output_amt_multiple * k.count - need.last
         end
 
-        needed.each do |k,v|
+        needed.each do |k, v|
           puts "\t\t#{k}\t#{v}" if @debug
         end
         puts "#{'#' * 40}" if @debug
@@ -65,54 +64,54 @@ class Day14Test < ActiveSupport::TestCase
       ores.sum
   }
 
-  describe 'part 1' do
+  describe "part 1" do
     let(:code) {
       GET_ORE.call(input_data)
     }
 
-    describe 'example 0' do
+    describe "example 0" do
       let(:data) { p1_e0 }
 
-      it 'works' do
+      it "works" do
         assert_equal(165, code)
       end
     end
 
-    describe 'example 1' do
+    describe "example 1" do
       let(:data) { p1_e1 }
 
-      it 'works' do
+      it "works" do
         assert_equal(13312, code)
       end
     end
 
-    describe 'example 2' do
+    describe "example 2" do
       let(:data) { p1_e2 }
 
-      it 'works' do
+      it "works" do
         assert_equal(180697, code)
       end
     end
 
-    describe 'example 3' do
+    describe "example 3" do
       let(:data) { p1_e3 }
 
-      it 'works' do
+      it "works" do
         assert_equal(2210736, code)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert(232531 > code)
         assert_equal(202617, code)
       end
     end
   end
 
-  describe 'part 2' do
+  describe "part 2" do
     let(:starting_ores) { 1_000_000_000_000 }
     let(:code) {
       answer = (0..starting_ores).bsearch do |fuel|
@@ -122,34 +121,34 @@ class Day14Test < ActiveSupport::TestCase
       answer - 1
     }
 
-    describe 'example 1' do
+    describe "example 1" do
       let(:data) { p1_e1 }
 
-      it 'works' do
+      it "works" do
         assert_equal(82892753, code)
       end
     end
 
-    describe 'example 2' do
+    describe "example 2" do
       let(:data) { p1_e2 }
 
-      it 'works' do
+      it "works" do
         assert_equal(5586022, code)
       end
     end
 
-    describe 'example 3' do
+    describe "example 3" do
       let(:data) { p1_e3 }
 
-      it 'works' do
+      it "works" do
         assert_equal(460664, code)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert_equal(7863863, code)
       end
     end
@@ -216,17 +215,17 @@ class Day14Test < ActiveSupport::TestCase
     5 BHXH, 4 VRPVC => 5 LTCX
     STR
   }
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) {
     c = {}
 
-    data.lines.map {|line| line.chomp.split('=>')}.each do |parts|
-      (output_n, name) = parts.last.strip.split(' ')
+    data.lines.map { |line| line.chomp.split("=>") }.each do |parts|
+      (output_n, name) = parts.last.strip.split(" ")
 
       output = OpenStruct.new(name: name, count: output_n.to_i)
-      input  = parts.first.split(', ').map {|v| v.split(' ')}.map{|parts| [parts.first.to_i, parts.last]}
+      input  = parts.first.split(", ").map { |v| v.split(" ") }.map { |parts| [ parts.first.to_i, parts.last ] }
 
-      c[output] = input.map {|data| OpenStruct.new(count: data.first, name: data.last) }
+      c[output] = input.map { |data| OpenStruct.new(count: data.first, name: data.last) }
     end
 
     c

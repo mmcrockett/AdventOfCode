@@ -1,8 +1,8 @@
 module Y2015
   class Day4
-    E0 = 'abcdef'
-    E1 = 'pqrstuv'
-    D  = 'bgvyzdsv'
+    E0 = "abcdef"
+    E1 = "pqrstuv"
+    D  = "bgvyzdsv"
 
     def initialize(data)
       @data = data
@@ -12,7 +12,7 @@ module Y2015
       i = 0
 
       while true
-        break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?('00000')
+        break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?("00000")
         i += 1
       end
 
@@ -23,7 +23,7 @@ module Y2015
       i = 0
 
       while true
-        break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?('000000')
+        break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?("000000")
         i += 1
       end
 

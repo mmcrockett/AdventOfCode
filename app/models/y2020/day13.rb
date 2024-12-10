@@ -5,14 +5,14 @@ module Y2020
     def initialize(file: nil, file_ext: nil, preamble_size: 25)
       @data = load_data(file_name(file: file, file_ext: file_ext))
       @ready_time = @data[0].to_i
-      @schedules  = @data[1].split(',').map {|v| v.to_d }
+      @schedules  = @data[1].split(",").map { |v| v.to_d }
     end
 
     def part1
       min = BigDecimal::INFINITY
       ans = nil
 
-      @schedules.select {|v| v.positive? }.each do |t|
+      @schedules.select { |v| v.positive? }.each do |t|
         delta = (@ready_time / t).ceil * t - @ready_time
 
         if delta < min

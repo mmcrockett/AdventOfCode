@@ -1,15 +1,15 @@
 module Y2020
   class Day17
     # 258 too high part1
-    ACTIVE   = '#'
-    INACTIVE = '.'
+    ACTIVE   = "#"
+    INACTIVE = "."
 
     include FileName
 
     def initialize(file: nil, file_ext: nil)
       @data = []
 
-      @data << load_data(file_name(file: file, file_ext: file_ext)).map {|line| line.chars }
+      @data << load_data(file_name(file: file, file_ext: file_ext)).map { |line| line.chars }
     end
 
     def cube_state(grid, x:, y:, z:)
@@ -25,40 +25,40 @@ module Y2020
     def next_state(grid, x:, y:, z:)
       c_state = cube_state(grid, x: x, y: y, z: z)
 
-      counts  = {ACTIVE => 0, INACTIVE => 0}
+      counts  = { ACTIVE => 0, INACTIVE => 0 }
 
       (-1..1).each do |zn|
-        #next if (zn + z) < 0
+        # next if (zn + z) < 0
         (-1..1).each do |yn|
-          #next if (yn + y) < 0
+          # next if (yn + y) < 0
           (-1..1).each do |xn|
-            #next if (xn + x) < 0
+            # next if (xn + x) < 0
             next if zn.zero? && yn.zero? && xn.zero?
 
             counts[cube_state(grid, x: x + xn, y: y + yn, z: z + zn)] += 1
-            #puts "#{z + zn},#{y + yn}, #{x + xn} #{counts[ACTIVE]}" if x == 0 && y == 0 && z == 0 && @skip.nil?
+            # puts "#{z + zn},#{y + yn}, #{x + xn} #{counts[ACTIVE]}" if x == 0 && y == 0 && z == 0 && @skip.nil?
 
             return INACTIVE if counts[ACTIVE] > 3
           end
         end
       end
 
-      #puts "#{z},#{y},#{x}:#{c_state} : #{counts[ACTIVE]}" if x >= 0 && y >= 0 && z == 0
+      # puts "#{z},#{y},#{x}:#{c_state} : #{counts[ACTIVE]}" if x >= 0 && y >= 0 && z == 0
 
       case c_state
       when ACTIVE
-        return ACTIVE if [2, 3].include?(counts[ACTIVE])
+        return ACTIVE if [ 2, 3 ].include?(counts[ACTIVE])
       when INACTIVE
         return ACTIVE if 3 == counts[ACTIVE]
       end
 
-      return INACTIVE
+      INACTIVE
     end
 
     def next_state_w(grid, x:, y:, z:, w:)
       c_state = cube_state_w(grid, x: x, y: y, z: z, w: w)
 
-      counts  = {ACTIVE => 0, INACTIVE => 0}
+      counts  = { ACTIVE => 0, INACTIVE => 0 }
 
       (-1..1).each do |wn|
         (-1..1).each do |zn|
@@ -76,12 +76,12 @@ module Y2020
 
       case c_state
       when ACTIVE
-        return ACTIVE if [2, 3].include?(counts[ACTIVE])
+        return ACTIVE if [ 2, 3 ].include?(counts[ACTIVE])
       when INACTIVE
         return ACTIVE if 3 == counts[ACTIVE]
       end
 
-      return INACTIVE
+      INACTIVE
     end
 
     def display(grid)
@@ -95,13 +95,13 @@ module Y2020
           x_size.times do |x|
             print grid[z][y][x]
           end
-          puts ''
+          puts ""
         end
       end
     end
 
     def part1(n = 1)
-      grids = [@data.dup]
+      grids = [ @data.dup ]
 
       n.times do |i|
         c_grid   = grids[-1]
@@ -126,7 +126,7 @@ module Y2020
     end
 
     def part2(n = 1)
-      grids = [@data.dup]
+      grids = [ @data.dup ]
 
       n.times do |i|
         c_grid   = grids[-1]

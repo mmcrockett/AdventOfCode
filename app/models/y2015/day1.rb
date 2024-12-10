@@ -1,6 +1,6 @@
 module Y2015
   class Day1
-    #1769 too low
+    # 1769 too low
     include FileName
 
     def initialize(file: nil, file_ext: nil)
@@ -12,14 +12,14 @@ module Y2015
     end
 
     def part1
-      @data.map {|l| l.chars.map {|v| '(' == v ? 1 : -1 }.sum }
+      @data.map { |l| l.chars.map { |v| "(" == v ? 1 : -1 }.sum }
     end
 
     def part2
       floor = 0
 
       @data.first.chars.each_with_index do |v, i|
-        floor += '(' == v ? 1 : -1
+        floor += "(" == v ? 1 : -1
 
         return (i + 1) if floor < 0
       end

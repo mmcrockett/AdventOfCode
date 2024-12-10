@@ -31,7 +31,7 @@ module Y2020
       data = @data.dup
 
       while data.present?
-        tuple = [data.shift]
+        tuple = [ data.shift ]
 
         next if tuple.sum > part1_answer
 

@@ -1,7 +1,7 @@
 module Y2020
   class Day23
-    EXAMPLE_1 = '389125467'.chars.map(&:to_i)
-    INPUT = '952316487'.chars.map(&:to_i)
+    EXAMPLE_1 = "389125467".chars.map(&:to_i)
+    INPUT = "952316487".chars.map(&:to_i)
 
     def initialize(input: INPUT)
       @max = input.max
@@ -15,7 +15,7 @@ module Y2020
       moves.times do
         new_v   = input[0] - 1
         pick_up = input[1..3]
-        input   = [input[0]] + input[4..-1]
+        input   = [ input[0] ] + input[4..-1]
         new_v   = @max if new_v < @min
 
         while pick_up.include?(new_v)
@@ -29,7 +29,7 @@ module Y2020
         input = input.rotate
       end
 
-      while (1 != input[0])
+      while 1 != input[0]
         input = input.rotate
       end
 
@@ -83,7 +83,7 @@ module Y2020
         next_v = list[start_v]
       end
 
-      [list[1], list[list[1]]]
+      [ list[1], list[list[1]] ]
     end
   end
 end

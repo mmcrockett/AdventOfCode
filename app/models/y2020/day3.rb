@@ -3,7 +3,7 @@ module Y2020
     include FileName
     include TwoDimensions
 
-    TREE = '#'.freeze
+    TREE = "#".freeze
 
     def initialize(file: nil, file_ext: nil)
       @data = load_data(file_name(file: file, file_ext: file_ext))
@@ -31,7 +31,7 @@ module Y2020
     def part2
       t = []
 
-      [[1,1],[3,1],[5,1],[7,1],[1,2]].each do |x_n, y_n|
+      [ [ 1, 1 ], [ 3, 1 ], [ 5, 1 ], [ 7, 1 ], [ 1, 2 ] ].each do |x_n, y_n|
         y  = 0
         x  = 0
         tn = 0

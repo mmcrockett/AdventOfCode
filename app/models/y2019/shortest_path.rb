@@ -3,7 +3,7 @@ module Dijkstra
     def initialize(nodes, source, debug = false)
       @dist     = {}
       @prev     = {}
-      @pqueue   = PriorityQueue.new         
+      @pqueue   = PriorityQueue.new
       @debug    = (true == @debug)
 
       @dist[source] = 0

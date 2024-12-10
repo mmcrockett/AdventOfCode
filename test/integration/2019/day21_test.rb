@@ -1,10 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 class Day21Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
 
-  describe 'part 1' do
-    describe 'solution' do
+  describe "part 1" do
+    describe "solution" do
       let(:data) { puzzle }
       let(:springscript) {
         <<~STR
@@ -18,10 +18,10 @@ class Day21Test < ActiveSupport::TestCase
         STR
       }
 
-      it 'works' do
+      it "works" do
         answer = ElfComputer.new([], input_data, no_input_mode: :break).run(springscript.chars.map(&:ord)).output
 
-        if answer.last > 'Z'.ord
+        if answer.last > "Z".ord
           answer = answer.last
         else
           answer = answer.map(&:chr).join()
@@ -32,8 +32,8 @@ class Day21Test < ActiveSupport::TestCase
     end
   end
 
-  describe 'part 2' do
-    describe 'solution' do
+  describe "part 2" do
+    describe "solution" do
       let(:data) { puzzle }
       let(:springscript) {
         <<~STR
@@ -51,10 +51,10 @@ class Day21Test < ActiveSupport::TestCase
         STR
       }
 
-      it 'works' do
+      it "works" do
         answer = ElfComputer.new([], input_data, no_input_mode: :break).run(springscript.chars.map(&:ord)).output
 
-        if answer.last > 'Z'.ord
+        if answer.last > "Z".ord
           answer = answer.last
         else
           answer = answer.map(&:chr).join()
@@ -65,6 +65,6 @@ class Day21Test < ActiveSupport::TestCase
     end
   end
 
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.chomp.split(',').map(&:to_i) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.chomp.split(",").map(&:to_i) }
 end

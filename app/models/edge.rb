@@ -26,7 +26,7 @@ class Edge
   end
 
   def connected_to(node)
-    result = vertices.reject {|other| other == node }
+    result = vertices.reject { |other| other == node }
 
     raise "Not found in #{vertices.map(&:name)}" unless 1 == result.size
 
@@ -34,6 +34,6 @@ class Edge
   end
 
   def vertices
-    [@node_a, @node_b]
+    [ @node_a, @node_b ]
   end
 end

@@ -11,7 +11,7 @@ module Dijkstra
     end
 
     def coord
-      [x,y]
+      [ x, y ]
     end
 
     def neighbors
@@ -25,7 +25,7 @@ module Dijkstra
     def add_neighbor(node, d)
       @neighbors[node] = d
 
-      return self
+      self
     end
 
     def to_s

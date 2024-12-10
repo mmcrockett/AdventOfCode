@@ -1,10 +1,10 @@
 module Y2020
   class Day15
-    INPUT = '0,20,7,16,1,18,15'
-    EXAMPLE = '0,3,6'
+    INPUT = "0,20,7,16,1,18,15"
+    EXAMPLE = "0,3,6"
 
     def initialize(input = INPUT)
-      @data = input.split(',').map(&:to_i)
+      @data = input.split(",").map(&:to_i)
     end
 
     def part1(n = 2020)
@@ -19,9 +19,9 @@ module Y2020
           speak = next_speak
         end
 
-        #debugger unless @q.nil?
+        # debugger unless @q.nil?
 
-        #puts "#{speak}"
+        # puts "#{speak}"
 
         next_speak = last_spoken[speak].nil? ? 0 : i - last_spoken[speak]
 

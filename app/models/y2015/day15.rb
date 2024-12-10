@@ -9,10 +9,10 @@ module Y2015
       @properties  = {}
 
       load_data(file_name(file: file, file_ext: file_ext)).each do |line|
-        (ingredient, values) = line.split(':')
+        (ingredient, values) = line.split(":")
 
-        values.split(',').each do |value|
-          (prop, amount) = value.split(' ')
+        values.split(",").each do |value|
+          (prop, amount) = value.split(" ")
 
           @ingredients << ingredient
           @properties[prop]        ||= {}
@@ -25,23 +25,23 @@ module Y2015
       amt = (100.to_f / values.map(&:abs).sum)
 
       if values.size == 2
-        return (amt * values.map(&:abs).min) + 1
+        (amt * values.map(&:abs).min) + 1
       else
-        raise 'missing for this size'
+        raise "missing for this size"
       end
     end
 
     def scoring_properties
-      @scoring_properties ||= @properties.reject {|k, v| 'calories' == k }
+      @scoring_properties ||= @properties.reject { |k, v| "calories" == k }
     end
 
     def calorie_properties
-      @calorie_properties ||= @properties.select {|k, v| 'calories' == k }
+      @calorie_properties ||= @properties.select { |k, v| "calories" == k }
     end
 
     def score(ingredients)
       results = scoring_properties.map do |property, amounts|
-        amounts.map {|k,v| v * ingredients[k] }.sum
+        amounts.map { |k, v| v * ingredients[k] }.sum
       end
 
       return 0 if results.any?(&:negative?)
@@ -51,7 +51,7 @@ module Y2015
 
     def calories(ingredients)
       results = calorie_properties.map do |property, amounts|
-        amounts.map {|k,v| v * ingredients[k] }.sum
+        amounts.map { |k, v| v * ingredients[k] }.sum
       end
 
       return 0 if results.any?(&:negative?)
@@ -67,12 +67,12 @@ module Y2015
 
       if 1 < limits.size
         results = (ingredient[:min]..max).map do |i|
-          new_amounts = amounts.merge({ingredient[:name] => i})
+          new_amounts = amounts.merge({ ingredient[:name] => i })
 
           find_max_score(limits[1..-1], new_amounts, max: max - i)
         end
       else
-        new_amounts = amounts.merge({ingredient[:name] => max})
+        new_amounts = amounts.merge({ ingredient[:name] => max })
 
         results = score(new_amounts) if @calorie_limit.nil? || @calorie_limit == calories(new_amounts)
 
@@ -88,8 +88,8 @@ module Y2015
       @mins  = Hash.new(0)
 
       scoring_properties.each do |prop, ingredients|
-        filtered  = ingredients.reject {|name, value| value.zero? }
-        groupings = filtered.group_by {|k,v| v.positive? }
+        filtered  = ingredients.reject { |name, value| value.zero? }
+        groupings = filtered.group_by { |k, v| v.positive? }
         next if groupings.size == 1 || groupings[true].size != 1 || groupings[false].size != 1
 
         (p_ingredient, p_value) = groupings[true].first
@@ -104,7 +104,7 @@ module Y2015
     end
 
     def part1
-      find_max_score(@ingredients.map {|name| {name: name, min: mins[name]} }).flatten.max
+      find_max_score(@ingredients.map { |name| { name: name, min: mins[name] } }).flatten.max
     end
 
     def part2
@@ -119,8 +119,8 @@ module Y2015
           maxs[k] = 100 if maxs[k] > 100
         end
       end
-  
-      find_max_score(@ingredients.map {|name| {name: name, min: 0} }).flatten.max
+
+      find_max_score(@ingredients.map { |name| { name: name, min: 0 } }).flatten.max
     end
   end
 end

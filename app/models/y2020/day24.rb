@@ -11,7 +11,7 @@ module Y2020
           v = values.shift
 
           case v
-          when 's', 'n'
+          when "s", "n"
             result << "#{v}#{values.shift}"
           else
             result << v
@@ -31,34 +31,34 @@ module Y2020
 
         line.each do |direction|
           case direction
-          when 'nw'
+          when "nw"
             y -= 1
             x -= 1
-          when 'sw'
+          when "sw"
             y += 1
             x -= 1
-          when 'ne'
+          when "ne"
             y -= 1
             x += 1
-          when 'se'
+          when "se"
             y += 1
             x += 1
-          when 'e'
+          when "e"
             x += 2
-          when 'w'
+          when "w"
             x -= 2
           else
             raise "Unknown '#{direction}'"
           end
         end
 
-        case grid[[y, x]]
-        when 'b'
-          grid[[y, x]] = 'w'
-        when nil, 'w'
-          grid[[y, x]] = 'b'
+        case grid[[ y, x ]]
+        when "b"
+          grid[[ y, x ]] = "w"
+        when nil, "w"
+          grid[[ y, x ]] = "b"
         else
-          raise "Unknown grid value '#{grid[[y, x]]}'"
+          raise "Unknown grid value '#{grid[[ y, x ]]}'"
         end
       end
 
@@ -71,46 +71,46 @@ module Y2020
       min_x = grid.each_key.map(&:last).min
       max_x = grid.each_key.map(&:last).max + 1
 
-      even_row_min = grid.find {|k,v| k.last == min_x }.first.first.even?
+      even_row_min = grid.find { |k, v| k.last == min_x }.first.first.even?
 
       min_x -= 1
 
       (min_y..max_y).each do |y|
         (min_x..max_x).each_with_index do |x, j|
           if (even_row_min != y.even? && j.odd?) || (even_row_min == y.even? && j.even?)
-            print '-'
+            print "-"
           else
-            print grid[[y, x]] || 'w'
+            print grid[[ y, x ]] || "w"
           end
         end
 
         puts
       end
 
-      [[min_y, min_x], [max_y, max_x]]
+      [ [ min_y, min_x ], [ max_y, max_x ] ]
     end
 
     def part1
-      grid.select {|k,v| v == 'b' }.size
+      grid.select { |k, v| v == "b" }.size
     end
 
     def part2(days: 100)
-      adj = [[-1, -1], [1, -1], [-1, 1], [1, 1], [0, 2], [0, -2]].freeze
-      grids = [grid]
+      adj = [ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ], [ 0, 2 ], [ 0, -2 ] ].freeze
+      grids = [ grid ]
 
       days.times do
         next_grid = {}
         last_grid = grids.last
 
-        last_grid.select {|k,v| 'b' == v }.each do |coord, tile|
+        last_grid.select { |k, v| "b" == v }.each do |coord, tile|
           black_friends = 0
 
           (y, x) = coord
 
           adj.each do |y_i, x_i|
-            adj_coord = [y + y_i, x + x_i]
+            adj_coord = [ y + y_i, x + x_i ]
 
-            if 'b' == last_grid[adj_coord]
+            if "b" == last_grid[adj_coord]
               black_friends += 1
             else
               next_grid[adj_coord] ||= 0
@@ -118,10 +118,10 @@ module Y2020
             end
           end
 
-          next_grid[[y, x]] = 'b' if [1, 2].include?(black_friends)
+          next_grid[[ y, x ]] = "b" if [ 1, 2 ].include?(black_friends)
         end
 
-        grids << Hash[next_grid.select {|k,v| 'b' == v || 2 == v }.map {|k,v| [k, 'b'] }]
+        grids << Hash[next_grid.select { |k, v| "b" == v || 2 == v }.map { |k, v| [ k, "b" ] }]
       end
 
       grids.last

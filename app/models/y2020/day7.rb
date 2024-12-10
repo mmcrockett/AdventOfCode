@@ -10,9 +10,9 @@ module Y2020
       bags   = {}
 
       File.open(file).each_line.map(&:chomp).each do |line|
-        line = line.gsub('bags', '').gsub('bag', '').gsub(' .', '')
+        line = line.gsub("bags", "").gsub("bag", "").gsub(" .", "")
 
-        (outer_bag, other_bags) = line.split(' contain ')
+        (outer_bag, other_bags) = line.split(" contain ")
 
         outer_bag = parse(outer_bag).last
 
@@ -20,9 +20,9 @@ module Y2020
 
         bags[outer_bag] = []
 
-        next if other_bags.include?('no other')
+        next if other_bags.include?("no other")
 
-        other_bags.split(',').each do |part|
+        other_bags.split(",").each do |part|
           bags[outer_bag] << parse(part)
         end
       end
@@ -33,16 +33,16 @@ module Y2020
     end
 
     def parse(bag_data)
-      values = bag_data.strip.split(' ')
+      values = bag_data.strip.split(" ")
 
       values.unshift(1) unless "#{values.first.to_i}" == values.first
 
-      [values.shift.to_i, values.join('_')]
+      [ values.shift.to_i, values.join("_") ]
     end
 
     def deep_contains?(contents)
       contents.each do |other_bag|
-        return true if 'shiny_gold' == other_bag.last
+        return true if "shiny_gold" == other_bag.last
 
         return true if deep_contains?(@data[other_bag.last])
       end
@@ -77,7 +77,7 @@ module Y2020
     end
 
     def part2
-      deep_count(@data['shiny_gold'])
+      deep_count(@data["shiny_gold"])
     end
   end
 end

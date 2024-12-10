@@ -7,7 +7,7 @@ module Y2015
     end
 
     def load_data(file)
-      File.open(file).each_line.map(&:chomp).map {|l| l.split('x') }
+      File.open(file).each_line.map(&:chomp).map { |l| l.split("x") }
     end
 
     def part1

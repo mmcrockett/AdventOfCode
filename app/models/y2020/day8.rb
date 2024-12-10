@@ -21,7 +21,7 @@ module Y2020
     end
 
     def part2
-      change_indices = @data.map.each_with_index {|v, i| i if v.split(' ').first.in?([Computer::JMP, Computer::NOP]) }.compact
+      change_indices = @data.map.each_with_index { |v, i| i if v.split(" ").first.in?([ Computer::JMP, Computer::NOP ]) }.compact
       gc = Computer.new
 
       change_indices.each do |index|
@@ -29,7 +29,7 @@ module Y2020
           case index == i
           when true
             if v.include?(Computer::JMP)
-              v.gsub(Computer::JMP, Computer::NOP) 
+              v.gsub(Computer::JMP, Computer::NOP)
             elsif v.include?(Computer::NOP)
               v.gsub(Computer::NOP, Computer::JMP)
             else

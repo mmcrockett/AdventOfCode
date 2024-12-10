@@ -11,16 +11,16 @@ class ElfComputer
   }
 
   GAME_OUTPUT = ->(v) {
-    return ' ' if 0 == v
-    return '|' if 1 == v
-    return '=' if 2 == v
-    return '_' if 3 == v
-    return '*' if 4 == v
+    return " " if 0 == v
+    return "|" if 1 == v
+    return "=" if 2 == v
+    return "_" if 3 == v
+    "*" if 4 == v
   }
 
   def initialize(inputs, code, loop_mode: false, name: SecureRandom.uuid, no_input_mode: :raise)
     @output = []
-    @inputs = [inputs].flatten
+    @inputs = [ inputs ].flatten
     @code   = code.dup
     @max    = @code.size.freeze
     @index  = 0
@@ -60,7 +60,7 @@ class ElfComputer
 
     if next_input.present?
       if next_input.is_a?(Array)
-        next_input.each {|z| @inputs << z}
+        next_input.each { |z| @inputs << z }
       else
         @inputs << next_input
       end
@@ -68,7 +68,7 @@ class ElfComputer
 
     clear_output if true == @lmode
 
-    while (@index < @max && @code[@index] != 99 && true == running)
+    while @index < @max && @code[@index] != 99 && true == running
       opcode_data = PARSEOP.call(@code[@index].to_s)
       opcode = opcode_data[:opcode]
       iplus  = 4
@@ -78,12 +78,12 @@ class ElfComputer
       v1     = @code[a1].to_i
       v2     = @code[a2].to_i
 
-      if (1 == opcode || 2 == opcode)
+      if 1 == opcode || 2 == opcode
         val  = v1 + v2 if 1 == opcode
         val  = v1 * v2 if 2 == opcode
 
         @code[a3] = val
-      elsif (3 == opcode || 4 == opcode)
+      elsif 3 == opcode || 4 == opcode
         iplus = 2
 
         if 3 == opcode
@@ -98,20 +98,20 @@ class ElfComputer
 
           running = false if true == @lmode
         end
-      elsif (5 == opcode || 6 == opcode)
+      elsif 5 == opcode || 6 == opcode
         if (0 == v1) && (6 == opcode) || (0 != v1) && (5 == opcode)
           iplus = 0
           @index = v2
         else
           iplus  = 3
         end
-      elsif (7 == opcode || 8 == opcode)
+      elsif 7 == opcode || 8 == opcode
         if (7 == opcode && v1 < v2) || (8 == opcode && v1 == v2)
           @code[a3] = 1
         else
           @code[a3] = 0
         end
-      elsif (9 == opcode)
+      elsif 9 == opcode
         iplus  = 2
         @rindex += v1
       else
@@ -121,18 +121,18 @@ class ElfComputer
       @index += iplus
     end
 
-    return self
+    self
   end
 
   def addr(i, mode)
     idx    = @index + i
 
     if 1 == mode
-      return idx
+      idx
     elsif 2 == mode
-      return @rindex + @code[idx]
+      @rindex + @code[idx]
     else
-      return @code[idx]
+      @code[idx]
     end
   end
 end

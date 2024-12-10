@@ -10,7 +10,7 @@ module Y2015
     def part1
       total_size  = @raw_data.map(&:chars).flatten.size
       string_size = @raw_data.map do |line|
-        line.delete_prefix('"').delete_suffix('"').gsub('\"', '"').gsub(/\\x(\d|a|b|c|d|e|f){2}/, 'X').gsub('\\\\', '\\').chars
+        line.delete_prefix('"').delete_suffix('"').gsub('\"', '"').gsub(/\\x(\d|a|b|c|d|e|f){2}/, "X").gsub("\\\\", "\\").chars
       end.flatten.size
 
       total_size - string_size
@@ -20,7 +20,7 @@ module Y2015
       total_size  = @raw_data.map(&:chars).flatten.size
 
       encoded_size = @raw_data.map do |line|
-        line.chars.map {|char| char.in?(['\\', '"']) ? 2 : 1 }.sum + 2
+        line.chars.map { |char| char.in?([ "\\", '"' ]) ? 2 : 1 }.sum + 2
       end.sum
 
       encoded_size - total_size

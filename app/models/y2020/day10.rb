@@ -31,11 +31,11 @@ module Y2020
 
     def part2
       # reddit lookup, never understood it
-      data = [0] + @data + [goal]
+      data = [ 0 ] + @data + [ goal ]
       data = data.sort
 
       friends = data.each_with_index.map do |adapter, index|
-        [adapter, data[index + 1, 3].select { |a| a <= adapter + 3 }]
+        [ adapter, data[index + 1, 3].select { |a| a <= adapter + 3 } ]
       end
 
       scores = []

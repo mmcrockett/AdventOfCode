@@ -2,10 +2,10 @@ module Y2015
   class Gate
     attr_reader :input, :output, :value
 
-    def initialize(output: , input: , func: )
+    def initialize(output:, input:, func:)
       @output = output
       @input  = input
-      @func   = func || 'wire'
+      @func   = func || "wire"
       @value  = func.present? ? nil : input.first
     end
 
@@ -27,9 +27,9 @@ module Y2015
     end
 
     def resolve(input, value)
-      @input = @input.map {|v| v == input ? value : v }
+      @input = @input.map { |v| v == input ? value : v }
 
-      if @input.all? {|v| Gate.integer_str?(v) }
+      if @input.all? { |v| Gate.integer_str?(v) }
         @value = self.send(@func, *@input.map(&:to_i))
       end
 
@@ -59,7 +59,7 @@ module Y2015
     end
 
     def reset_data
-      @data = @raw_data.map {|d| parse(d) }
+      @data = @raw_data.map { |d| parse(d) }
     end
 
     def parse(str)
@@ -67,23 +67,23 @@ module Y2015
       b = nil
       g = nil
 
-      (input, output) = str.split(' -> ')
+      (input, output) = str.split(" -> ")
 
       matcher = input.match(/(?<a>\w+)\s(?<gate>AND|OR|LSHIFT|RSHIFT)\s(?<b>\w+)/)
 
       if matcher.present?
-        a = matcher['a']
-        b = matcher['b']
-        g = matcher['gate']
-      elsif input.start_with?('NOT')
-        (g, a) = input.split(' ')
+        a = matcher["a"]
+        b = matcher["b"]
+        g = matcher["gate"]
+      elsif input.start_with?("NOT")
+        (g, a) = input.split(" ")
       else
         a = input
       end
 
       Gate.new(
         output: output.strip,
-        input: [a, b].compact,
+        input: [ a, b ].compact,
         func: g&.downcase
       )
     end
@@ -104,20 +104,20 @@ module Y2015
           end
         end
 
-        data = data.reject {|gate| gate.resolved? && output_map.include?(gate.output) }
+        data = data.reject { |gate| gate.resolved? && output_map.include?(gate.output) }
       end
 
       output_map
     end
 
     def part2
-      part1_a = self.part1['a']
+      part1_a = self.part1["a"]
 
       reset_data
 
-      @data = @raw_data.map {|d| parse(d) }
+      @data = @raw_data.map { |d| parse(d) }
 
-      b_gate = @data.find {|gate| gate.output == 'b' }
+      b_gate = @data.find { |gate| gate.output == "b" }
       b_gate.change_value(part1_a)
 
       self.part1

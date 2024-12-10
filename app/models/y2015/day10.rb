@@ -1,6 +1,6 @@
 module Y2015
   class Day10
-    INPUT = '1113122113'
+    INPUT = "1113122113"
 
     # 469694 too high
     def self.look_n_say(str)
@@ -25,7 +25,7 @@ module Y2015
       new_str.map(&:to_s)
     end
 
-    def self.part1(value: , limit:)
+    def self.part1(value:, limit:)
       limit.times do
         value = Day10.look_n_say(value)
       end

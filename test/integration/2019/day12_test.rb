@@ -1,15 +1,15 @@
-require 'test_helper'
+require "test_helper"
 
 class Day12Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
 
-  describe 'part 1' do
+  describe "part 1" do
     let(:code) {
       positions  = input_data.dup
       n          = positions.size.freeze
       velocities = []
 
-      n.times { velocities << [0,0,0] }
+      n.times { velocities << [ 0, 0, 0 ] }
 
       max_steps.times do
         (0..n - 1).each do |i|
@@ -27,46 +27,46 @@ class Day12Test < ActiveSupport::TestCase
             end
           end
 
-          positions[i] = positions[i].map.each_with_index {|p, k| p += velocities[i][k]}
+          positions[i] = positions[i].map.each_with_index { |p, k| p += velocities[i][k] }
         end
       end
 
       {
         p: positions,
         v: velocities,
-        a: positions.map.each_with_index {|p, i| p.map(&:abs).sum * velocities[i].map(&:abs).sum}.sum
+        a: positions.map.each_with_index { |p, i| p.map(&:abs).sum * velocities[i].map(&:abs).sum }.sum
       }
     }
 
-    describe 'e0' do
+    describe "e0" do
       let(:data) { p1_e0 }
       let(:max_steps) { 10 }
 
-      it 'works' do
+      it "works" do
         assert_equal(179, code[:a])
       end
     end
 
-    describe 'e1' do
+    describe "e1" do
       let(:data) { p1_e1 }
       let(:max_steps) { 100 }
 
-      it 'works' do
+      it "works" do
         assert_equal(1940, code[:a])
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
       let(:max_steps) { 1000 }
 
-      it 'works' do
+      it "works" do
         assert_equal(10845, code[:a])
       end
     end
   end
 
-  describe 'part 2' do
+  describe "part 2" do
     let(:code) {
       positions  = input_data.dup
       n          = positions.size.freeze
@@ -74,7 +74,7 @@ class Day12Test < ActiveSupport::TestCase
       steps      = 1
       answer     = []
 
-      n.times { velocities << [0,0,0] }
+      n.times { velocities << [ 0, 0, 0 ] }
 
       while true
         4.times do |i|
@@ -92,11 +92,11 @@ class Day12Test < ActiveSupport::TestCase
             end
           end
 
-          positions[i] = positions[i].map.each_with_index {|p, k| p += velocities[i][k]}
+          positions[i] = positions[i].map.each_with_index { |p, k| p += velocities[i][k] }
         end
 
         3.times do |i|
-          answer[i] = steps if velocities.all? {|v| 0 == v[i] } && input_data[0][i] == positions[0][i] && input_data[1][i] == positions[1][i] && input_data[2][i] == positions[2][i] && input_data[3][i] == positions[3][i]
+          answer[i] = steps if velocities.all? { |v| 0 == v[i] } && input_data[0][i] == positions[0][i] && input_data[1][i] == positions[1][i] && input_data[2][i] == positions[2][i] && input_data[3][i] == positions[3][i]
         end
 
         break if 3 == answer.compact.size
@@ -107,26 +107,26 @@ class Day12Test < ActiveSupport::TestCase
       answer.inject(:lcm)
     }
 
-    describe 'e0' do
+    describe "e0" do
       let(:data) { p1_e0 }
 
-      it 'works' do
+      it "works" do
         assert_equal(2772, code)
       end
     end
 
-    describe 'e1' do
+    describe "e1" do
       let(:data) { p1_e1 }
 
-      it 'works' do
+      it "works" do
         assert_equal(4686774924, code / 2)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert_equal(551272644867044, code / 2)
       end
     end
@@ -148,8 +148,8 @@ class Day12Test < ActiveSupport::TestCase
     <x=9, y=-8, z=-3>
     STR
   }
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) {
-    data.lines.map {|z| z.split(', ').map {|x| x.split('=').last.to_i } }
+    data.lines.map { |z| z.split(", ").map { |x| x.split("=").last.to_i } }
   }
 end

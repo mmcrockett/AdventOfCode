@@ -8,29 +8,29 @@ module Y2020
 
       load_data(file_name(file: file, file_ext: file_ext)).each do |line|
         (foods, allergens) = line.split(/\(contains /)
-        foods = foods.split(' ')
+        foods = foods.split(" ")
 
         @recipes << foods
 
         allergens.split(/, /).each do |allergen|
-          @data[allergen.delete(')')] ||= []
-          @data[allergen.delete(')')] << foods
+          @data[allergen.delete(")")] ||= []
+          @data[allergen.delete(")")] << foods
         end
       end
     end
 
     def results
-      data = Hash[@data.map {|k,v| [k, v.reduce(&:&)] }]
+      data = Hash[@data.map { |k, v| [ k, v.reduce(&:&) ] }]
 
-      while false == data.select {|k, v| v.is_a?(Array) }.empty?
-        data = Hash[data.map {|k,v| [k, v.size == 1 ? v[0] : v] }]
+      while false == data.select { |k, v| v.is_a?(Array) }.empty?
+        data = Hash[data.map { |k, v| [ k, v.size == 1 ? v[0] : v ] }]
 
-        found = data.reject {|k, v| v.is_a?(Array) }
+        found = data.reject { |k, v| v.is_a?(Array) }
 
         found.each do |allergen, food|
           data = Hash[data.map do |k, v|
             v.delete(food)
-            [k, v]
+            [ k, v ]
           end]
         end
       end
@@ -49,7 +49,7 @@ module Y2020
     end
 
     def part2
-      Hash[results.sort_by {|k,v| k }].values.join(',')
+      Hash[results.sort_by { |k, v| k }].values.join(",")
     end
   end
 end

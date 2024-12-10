@@ -26,12 +26,12 @@ module Dijkstra
     end
 
     def to_s
-      @queue.map {|k,v| [k.to_s, v]}
+      @queue.map { |k, v| [ k.to_s, v ] }
     end
 
     private
     def order_queue
-      @queue = Hash[@queue.sort_by {|_key, value| value }]
+      @queue = Hash[@queue.sort_by { |_key, value| value }]
     end
 
     alias_method :pop, :remove_min

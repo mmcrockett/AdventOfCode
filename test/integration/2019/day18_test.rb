@@ -1,8 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
 class Day18Test < ActiveSupport::TestCase
   PUZZLE_FILE = "#{self.name.underscore}.txt"
-  DOOR_TO_KEY = ('a'.ord - 'A'.ord).freeze
+  DOOR_TO_KEY = ("a".ord - "A".ord).freeze
 
   def parse_map
     @entrances = {}
@@ -10,8 +10,8 @@ class Day18Test < ActiveSupport::TestCase
 
     @input_data.each_with_index do |line, y|
       line.each_with_index do |tile, x|
-        @entrances[tile + @entrances.size] = [x, y] if tile.entrance?
-        @keys[tile]      = [x, y] if tile.vault_key?
+        @entrances[tile + @entrances.size] = [ x, y ] if tile.entrance?
+        @keys[tile]      = [ x, y ] if tile.vault_key?
       end
     end
   end
@@ -19,28 +19,28 @@ class Day18Test < ActiveSupport::TestCase
   def breadth_first_search
     @k2k       = {}
     @keys.merge(@entrances).each do |key, key_pos|
-      queue = [ [*key_pos, []] ]
+      queue = [ [ *key_pos, [] ] ]
       distance = { key_pos => 0 }
       keys = []
 
-      while(false == queue.empty?)
+      while false == queue.empty?
         from_x, from_y, needed_keys = queue.shift
-        [[0, -1], [0, 1], [-1, 0], [1, 0]].each do |delta_x, delta_y|
+        [ [ 0, -1 ], [ 0, 1 ], [ -1, 0 ], [ 1, 0 ] ].each do |delta_x, delta_y|
           x = from_x + delta_x
           y = from_y + delta_y
-          pos  = [x,y]
+          pos  = [ x, y ]
           tile = @input_data[y][x]
 
           next if tile.wall? || distance.include?(pos)
 
-          distance[pos] = distance[[from_x,from_y]] + 1
+          distance[pos] = distance[[ from_x, from_y ]] + 1
 
           keys << [ tile, needed_keys, distance[pos] ] if tile.vault_key?
 
           if tile.vault_door?
-            queue << [x, y, needed_keys + [tile + DOOR_TO_KEY]]
+            queue << [ x, y, needed_keys + [ tile + DOOR_TO_KEY ] ]
           else
-            queue << [x, y, needed_keys]
+            queue << [ x, y, needed_keys ]
           end
         end
       end
@@ -60,11 +60,11 @@ class Day18Test < ActiveSupport::TestCase
       end
     end
 
-    return keys
+    keys
   end
 
   def min_steps(pos, unlocked = [], cache = {})
-    cache_key = [pos.sort.join, unlocked.sort.join]
+    cache_key = [ pos.sort.join, unlocked.sort.join ]
 
     if false == cache.include?(cache_key)
       keys = reachable_keys(pos, unlocked)
@@ -75,7 +75,7 @@ class Day18Test < ActiveSupport::TestCase
         keys.each do |runner, key, distance|
           orig = pos[runner]
           pos[runner] = key
-          steps << distance + min_steps(pos, unlocked + [key], cache)
+          steps << distance + min_steps(pos, unlocked + [ key ], cache)
           pos[runner] = orig
         end
         val = steps.min
@@ -83,10 +83,10 @@ class Day18Test < ActiveSupport::TestCase
       cache[cache_key] = val
     end
 
-    return cache[cache_key]
+    cache[cache_key]
   end
 
-  describe 'part 1' do
+  describe "part 1" do
     before do
       @input_data = input_data
       parse_map
@@ -94,63 +94,63 @@ class Day18Test < ActiveSupport::TestCase
       @answer = min_steps(@entrances.keys)
     end
 
-    describe 'example 0' do
+    describe "example 0" do
       let(:data) { p1_e0 }
 
-      it 'works' do
+      it "works" do
         assert_equal(8, @answer)
       end
     end
 
-    describe 'example 1' do
+    describe "example 1" do
       let(:data) { p1_e1 }
 
-      it 'works' do
+      it "works" do
         assert_equal(86, @answer)
       end
     end
 
-    describe 'example 2' do
+    describe "example 2" do
       let(:data) { p1_e2 }
 
-      it 'works' do
+      it "works" do
         assert_equal(136, @answer)
       end
     end
 
-    describe 'example 3' do
+    describe "example 3" do
       let(:data) { p1_e3 }
 
-      it 'works' do
+      it "works" do
         assert_equal(81, @answer)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert_equal(3146, @answer)
       end
     end
   end
 
-  describe 'part 2' do
+  describe "part 2" do
     before do
       @input_data = input_data
       parse_map
 
       (x0, y0) = @entrances.values.first
 
-      @input_data[y0][x0] = '#'.ord
-      @input_data[y0 + 1][x0] = '#'.ord
-      @input_data[y0 - 1][x0] = '#'.ord
-      @input_data[y0][x0 + 1] = '#'.ord
-      @input_data[y0][x0 - 1] = '#'.ord
-      @input_data[y0 + 1][x0 + 1] = '@'.ord
-      @input_data[y0 - 1][x0 - 1] = '@'.ord
-      @input_data[y0 + 1][x0 - 1] = '@'.ord
-      @input_data[y0 - 1][x0 + 1] = '@'.ord
+      @input_data[y0][x0] = "#".ord
+      @input_data[y0 + 1][x0] = "#".ord
+      @input_data[y0 - 1][x0] = "#".ord
+      @input_data[y0][x0 + 1] = "#".ord
+      @input_data[y0][x0 - 1] = "#".ord
+      @input_data[y0 + 1][x0 + 1] = "@".ord
+      @input_data[y0 - 1][x0 - 1] = "@".ord
+      @input_data[y0 + 1][x0 - 1] = "@".ord
+      @input_data[y0 - 1][x0 + 1] = "@".ord
 
       parse_map
 
@@ -158,18 +158,18 @@ class Day18Test < ActiveSupport::TestCase
       @answer = min_steps(@entrances.keys)
     end
 
-    describe 'example 3' do
+    describe "example 3" do
       let(:data) { p2_e3 }
 
-      it 'works' do
+      it "works" do
         assert_equal(72, @answer)
       end
     end
 
-    describe 'solution' do
+    describe "solution" do
       let(:data) { puzzle }
 
-      it 'works' do
+      it "works" do
         assert_equal(2194, @answer)
       end
     end
@@ -227,6 +227,6 @@ class Day18Test < ActiveSupport::TestCase
     #############
     STR
   }
-  let(:puzzle) { read_test_file(File.join('aoc', PUZZLE_FILE)) }
-  let(:input_data) { data.lines.map {|line| line.strip.chomp.chars.map(&:ord) } }
+  let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
+  let(:input_data) { data.lines.map { |line| line.strip.chomp.chars.map(&:ord) } }
 end

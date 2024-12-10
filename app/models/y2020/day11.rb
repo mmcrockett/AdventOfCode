@@ -2,9 +2,9 @@ module Y2020
   class Day11
     include FileName
 
-    EMPTY = 'L'
-    OCCUPIED  = '#'
-    FLOOR = '.'
+    EMPTY = "L"
+    OCCUPIED  = "#"
+    FLOOR = "."
 
     def initialize(file: nil, file_ext: nil)
       @data = load_data(file_name(file: file, file_ext: file_ext))
@@ -20,8 +20,8 @@ module Y2020
     end
 
     def any_occupied?(data, i, j)
-      [-1, 0, 1].each do |ix|
-        [-1, 0, 1].each do |jx|
+      [ -1, 0, 1 ].each do |ix|
+        [ -1, 0, 1 ].each do |jx|
           next if ix.zero? && jx.zero?
           next if (i + ix).negative? || (j + jx).negative?
           next if (i + ix) >= height || (j + jx) >= width
@@ -30,14 +30,14 @@ module Y2020
         end
       end
 
-      return false
+      false
     end
 
     def too_many_occupied?(data, i, j)
       count = 0
 
-      [-1, 0, 1].map do |ix|
-        [-1, 0, 1].map do |jx|
+      [ -1, 0, 1 ].map do |ix|
+        [ -1, 0, 1 ].map do |jx|
           next if ix.zero? && jx.zero?
           next if (i + ix).negative? || (j + jx).negative?
           next if (i + ix) >= height || (j + jx) >= width
@@ -48,7 +48,7 @@ module Y2020
         end
       end
 
-      return false
+      false
     end
 
     def floor?(seat)
@@ -64,7 +64,7 @@ module Y2020
     end
 
     def part1
-      last_round = @data.map {|row| row.chars }
+      last_round = @data.map { |row| row.chars }
       this_round = nil
 
       while last_round != this_round
@@ -92,7 +92,7 @@ module Y2020
     end
 
     def any_visibly_occupied?(data, i, j)
-      slopes = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]].freeze
+      slopes = [ [ -1, -1 ], [ -1, 0 ], [ -1, 1 ], [ 0, -1 ], [ 0, 1 ], [ 1, -1 ], [ 1, 0 ], [ 1, 1 ] ].freeze
 
       slopes.each do |yd, xd|
         new_i = i + yd
@@ -108,12 +108,12 @@ module Y2020
         end
       end
 
-      return false
+      false
     end
 
     def too_many_visibly_occupied?(data, i, j)
       count  = 0
-      slopes = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]].freeze
+      slopes = [ [ -1, -1 ], [ -1, 0 ], [ -1, 1 ], [ 0, -1 ], [ 0, 1 ], [ 1, -1 ], [ 1, 0 ], [ 1, 1 ] ].freeze
 
       slopes.each do |yd, xd|
         new_i = i + yd
@@ -131,15 +131,15 @@ module Y2020
         end
       end
 
-      return false
+      false
     end
 
     def print(grid)
-      puts grid.map {|row| row.join }
+      puts grid.map { |row| row.join }
     end
 
     def part2
-      last_round = @data.map {|row| row.chars }
+      last_round = @data.map { |row| row.chars }
       this_round = nil
       round      = nil
 
@@ -166,7 +166,7 @@ module Y2020
         if round.present?
           round += 1
 
-          expected_data = load_data("/Users/mcrockett/tmp/day11.expected.#{round}").map {|row| row.chars }
+          expected_data = load_data("/Users/mcrockett/tmp/day11.expected.#{round}").map { |row| row.chars }
 
           debugger unless this_round == expected_data
 

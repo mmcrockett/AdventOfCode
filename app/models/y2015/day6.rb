@@ -4,8 +4,8 @@ module Y2015
 
     attr_reader :lights
 
-    TOGGLE = 'toggle'
-    TURN   = 'turn'
+    TOGGLE = "toggle"
+    TURN   = "turn"
 
     def initialize(file: nil, file_ext: nil)
       @data   = load_data(file_name(file: file, file_ext: file_ext))
@@ -13,14 +13,14 @@ module Y2015
     end
 
     def load_data(file)
-      File.open(file).each_line.map(&:chomp).map {|line| instruction(line) }
+      File.open(file).each_line.map(&:chomp).map { |line| instruction(line) }
     end
 
     def instruction(str)
-      parts = str.split(' ')
+      parts = str.split(" ")
 
-      (start_x, start_y) = parts[-3].split(',')
-      (end_x, end_y)     = parts[-1].split(',')
+      (start_x, start_y) = parts[-3].split(",")
+      (end_x, end_y)     = parts[-1].split(",")
 
       OpenStruct.new(
         start_x: start_x.to_i,
@@ -28,8 +28,8 @@ module Y2015
         end_x: end_x.to_i,
         end_y: end_y.to_i,
         toggle?: TOGGLE == parts[0],
-        on?: TURN == parts[0] && 'on' == parts[1],
-        off?: TURN == parts[0] && 'off' == parts[1] 
+        on?: TURN == parts[0] && "on" == parts[1],
+        off?: TURN == parts[0] && "off" == parts[1]
       )
     end
 

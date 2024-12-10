@@ -1,10 +1,10 @@
 class ExtendedEuclideanAlgorithm
   def self.perform(val_a, val_b)
     i = 0
-    r = [val_a, val_b].sort.reverse
-    s = [1, 0]
-    t = [0, 1]
-    q = [nil, nil]
+    r = [ val_a, val_b ].sort.reverse
+    s = [ 1, 0 ]
+    t = [ 0, 1 ]
+    q = [ nil, nil ]
 
     while false == r.last.zero?
       q << r[-2] / r[-1]
@@ -14,7 +14,7 @@ class ExtendedEuclideanAlgorithm
     end
 
     r.each_with_index do |m, i|
-      puts [i, q[i], r[i], s[i], t[i]].join("\t")
+      puts [ i, q[i], r[i], s[i], t[i] ].join("\t")
     end
 
     OpenStruct.new(

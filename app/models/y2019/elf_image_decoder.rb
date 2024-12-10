@@ -11,8 +11,8 @@ class ElfImageDecoder
     @pixels.each do |pixel|
       color = pixel[y * width + x]
 
-      return ' ' if '0' == color
-      return 'X' if '1' == color
+      return " " if "0" == color
+      return "X" if "1" == color
     end
   end
 
@@ -22,12 +22,12 @@ class ElfImageDecoder
     result = []
     size  = (w * h).freeze
 
-    while (index < d.size)
+    while index < d.size
       result << d.slice(index, size)
 
       index += size
     end
 
-    return result.freeze
+    result.freeze
   end
 end

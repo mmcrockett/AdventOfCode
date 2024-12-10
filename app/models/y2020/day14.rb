@@ -7,17 +7,17 @@ module Y2020
     end
 
     def or_mask(mask)
-      mask.chars.map {|c| '1' == c ? 1 : 0 }.join.to_i(2)
+      mask.chars.map { |c| "1" == c ? 1 : 0 }.join.to_i(2)
     end
 
     def and_mask(mask)
-      mask.chars.map {|c| '0' == c ? 0 : 1 }.join.to_i(2)
+      mask.chars.map { |c| "0" == c ? 0 : 1 }.join.to_i(2)
     end
 
     def x_mask(mask)
-      and_mask = mask.chars.map {|c| 'X' == c ? 0 : 1 }.join.to_i(2)
-      or_mask  = mask.chars.reverse.map.each_with_index {|c, i| i if 'X' == c }.compact
-      or_masks = [0]
+      and_mask = mask.chars.map { |c| "X" == c ? 0 : 1 }.join.to_i(2)
+      or_mask  = mask.chars.reverse.map.each_with_index { |c, i| i if "X" == c }.compact
+      or_masks = [ 0 ]
 
       (1..or_mask.size).each do |i|
         or_mask.combination(i).each do |combo|
@@ -52,8 +52,8 @@ module Y2020
       amask  = nil
 
       @data.each do |instruction|
-        if instruction.start_with?('mask')
-          mask  = instruction.chars.select {|c| ['1', '0', 'X'].include?(c) }.join
+        if instruction.start_with?("mask")
+          mask  = instruction.chars.select { |c| [ "1", "0", "X" ].include?(c) }.join
           omask = or_mask(mask)
           amask = and_mask(mask)
         else
@@ -72,8 +72,8 @@ module Y2020
       xmask  = nil
 
       @data.each do |instruction|
-        if instruction.start_with?('mask')
-          mask  = instruction.chars.select {|c| ['1', '0', 'X'].include?(c) }.join
+        if instruction.start_with?("mask")
+          mask  = instruction.chars.select { |c| [ "1", "0", "X" ].include?(c) }.join
           omask = or_mask(mask)
           xmask = x_mask(mask)
         else

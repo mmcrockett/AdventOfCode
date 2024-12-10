@@ -27,7 +27,7 @@ end
 
 module Y2015
   class Day11
-    INPUT = 'hxbxwxba'
+    INPUT = "hxbxwxba"
 
     def self.next_password(str)
       while false == str.advent_valid?

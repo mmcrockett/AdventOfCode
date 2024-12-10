@@ -1,13 +1,13 @@
 module Y2020
   class Day2
-    F = Rails.root.join('test/fixtures/files/y2020/day2.txt')
+    F = Rails.root.join("test/fixtures/files/y2020/day2.txt")
 
     def initialize
       @data = File.open(F).each_line.map do |line|
         line = line.chomp
-        (r, b) = line.split(':')
-        (r, l) = r.split(' ')
-        (min, max) = r.split('-')
+        (r, b) = line.split(":")
+        (r, l) = r.split(" ")
+        (min, max) = r.split("-")
 
         OpenStruct.new(
           min: min.to_i,

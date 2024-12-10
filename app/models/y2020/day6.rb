@@ -1,7 +1,7 @@
 class String
   def xor(other)
     my_chars = self.chars
-    new_str  = ''
+    new_str  = ""
 
     other.chars.each do |other_char|
       new_str << other_char if my_chars.include?(other_char)

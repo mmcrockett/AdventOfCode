@@ -12,10 +12,10 @@ module Y2020
 
       while i < data.size
         case data[i]
-        when '*'
+        when "*"
           total *= data[i + 1].to_i
           i     += 2
-        when '+'
+        when "+"
           total += data[i + 1].to_i
           i     += 2
         else
@@ -30,18 +30,18 @@ module Y2020
       results = {}
       depth   = 0
 
-      str.delete(' ').chars.each do |v|
+      str.delete(" ").chars.each do |v|
         case v
-        when '('
+        when "("
           depth += 1
-        when ')'
+        when ")"
           v = e(results[depth])
           results.delete(depth)
           depth -= 1
         end
 
         results[depth] ||= []
-        results[depth]  <<  v unless ['(', ')'].include?(v)
+        results[depth]  <<  v unless [ "(", ")" ].include?(v)
       end
 
       results.values.map do |values|
@@ -50,13 +50,13 @@ module Y2020
     end
 
     def part1
-      @data.map {|line| parse(line) }
+      @data.map { |line| parse(line) }
     end
 
     def e_2(data)
       data = data.dup
 
-      ['+', '*'].each do |operator|
+      [ "+", "*" ].each do |operator|
         next_o = data.index(operator)
 
         while false == next_o.nil?
@@ -67,13 +67,13 @@ module Y2020
           v    = data[s_i].to_i.send(operator, data[e_i].to_i)
 
           if data.size == 3
-            data = [v]
+            data = [ v ]
           elsif slice_start.negative?
-            data = [v] + data[slice_end..-1]
+            data = [ v ] + data[slice_end..-1]
           elsif slice_end >= data.size
-            data = data[0..slice_start] + [v]
+            data = data[0..slice_start] + [ v ]
           else
-            data = data[0..slice_start] + [v] + data[slice_end..-1]
+            data = data[0..slice_start] + [ v ] + data[slice_end..-1]
           end
 
           next_o = data.index(operator)
@@ -87,18 +87,18 @@ module Y2020
       results = {}
       depth   = 0
 
-      str.delete(' ').chars.each do |v|
+      str.delete(" ").chars.each do |v|
         case v
-        when '('
+        when "("
           depth += 1
-        when ')'
+        when ")"
           v = e_2(results[depth])
           results.delete(depth)
           depth -= 1
         end
 
         results[depth] ||= []
-        results[depth]  <<  v unless ['(', ')'].include?(v)
+        results[depth]  <<  v unless [ "(", ")" ].include?(v)
       end
 
       results.values.map do |values|
@@ -107,7 +107,7 @@ module Y2020
     end
 
     def part2
-      @data.map {|line| parse_part2(line) }
+      @data.map { |line| parse_part2(line) }
     end
   end
 end

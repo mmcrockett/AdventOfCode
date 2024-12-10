@@ -17,7 +17,7 @@ module Y2015
       has_double  = false
       vowel_count = 0
 
-      return false if ALWAYS_NAUGHTY.any? {|z| s.include?(z) }
+      return false if ALWAYS_NAUGHTY.any? { |z| s.include?(z) }
 
       s.chars.each_with_index do |char, i|
         has_double   = true if i > 0 && s[i - 1] == char
@@ -26,7 +26,7 @@ module Y2015
         return true if has_double && vowel_count >= 3
       end
 
-      return false
+      false
     end
 
     def nice2?(s)
@@ -45,7 +45,7 @@ module Y2015
           when 2, 3
             next unless 2 == working_tuple.uniq.size
 
-            while (working_tuple.size > 1)
+            while working_tuple.size > 1
               tuples << working_tuple[0..1].join
               working_tuple.shift
             end
@@ -88,7 +88,7 @@ module Y2015
 
       set_repeat = true if tuples.size != tuples.uniq.size
 
-      return set_repeat && skip_repeat
+      set_repeat && skip_repeat
     end
 
     def part1
