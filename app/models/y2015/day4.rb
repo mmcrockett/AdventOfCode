@@ -13,6 +13,7 @@ module Y2015
 
       while true
         break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?("00000")
+
         i += 1
       end
 
@@ -24,6 +25,7 @@ module Y2015
 
       while true
         break if Digest::MD5.hexdigest("#{@data}#{i}").start_with?("000000")
+
         i += 1
       end
 

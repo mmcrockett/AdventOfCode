@@ -13,15 +13,15 @@ module Y2020
     def part1
       gc = Computer.new.load(@data)
 
-      while false == gc.seen?
-        gc.mark_seen.step
-      end
+      gc.mark_seen.step while false == gc.seen?
 
       gc.accumulator
     end
 
     def part2
-      change_indices = @data.map.each_with_index { |v, i| i if v.split(" ").first.in?([ Computer::JMP, Computer::NOP ]) }.compact
+      change_indices = @data.map.each_with_index do |v, i|
+        i if v.split(" ").first.in?([ Computer::JMP, Computer::NOP ])
+      end.compact
       gc = Computer.new
 
       change_indices.each do |index|
@@ -42,9 +42,7 @@ module Y2020
 
         gc = Computer.new.load(code)
 
-        while false == gc.seen? && false == gc.beyond_memory?
-          gc.mark_seen.step
-        end
+        gc.mark_seen.step while false == gc.seen? && false == gc.beyond_memory?
 
         break if gc.beyond_memory? && gc.ip == code.size
       end

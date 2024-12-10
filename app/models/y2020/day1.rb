@@ -7,7 +7,7 @@ module Y2020
     end
 
     def part1
-      @lines.size.times do | i|
+      @lines.size.times do |i|
         (i + 1..@lines.size).each do |j|
           a = @lines[i].to_i
           b = @lines[j].to_i
@@ -20,7 +20,7 @@ module Y2020
     end
 
     def part2
-      @lines.size.times do | i|
+      @lines.size.times do |i|
         (i + 1..@lines.size).each do |j|
           (j + 1..@lines.size).each do |k|
             a = @lines[i].to_i

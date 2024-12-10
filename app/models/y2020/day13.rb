@@ -52,9 +52,7 @@ module Y2020
 
       current_bus = buses.shift
 
-      while false == buses.empty?
-        current_bus = Day13.combine(current_bus, buses.shift)
-      end
+      current_bus = Day13.combine(current_bus, buses.shift) while false == buses.empty?
 
       current_bus.offset * -1
     end

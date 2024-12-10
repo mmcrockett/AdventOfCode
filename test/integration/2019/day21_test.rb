@@ -1,33 +1,33 @@
 require "test_helper"
 
 class Day21Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   describe "part 1" do
     describe "solution" do
       let(:data) { puzzle }
-      let(:springscript) {
+      let(:springscript) do
         <<~STR
-        NOT A J
-        NOT B T
-        OR T J
-        NOT C T
-        OR T J
-        AND D J
-        WALK
+          NOT A J
+          NOT B T
+          OR T J
+          NOT C T
+          OR T J
+          AND D J
+          WALK
         STR
-      }
+      end
 
       it "works" do
         answer = ElfComputer.new([], input_data, no_input_mode: :break).run(springscript.chars.map(&:ord)).output
 
-        if answer.last > "Z".ord
-          answer = answer.last
+        answer = if answer.last > "Z".ord
+                   answer.last
         else
-          answer = answer.map(&:chr).join()
+                   answer.map(&:chr).join
         end
 
-        assert_equal(19354392, answer)
+        assert_equal(19_354_392, answer)
       end
     end
   end
@@ -35,32 +35,32 @@ class Day21Test < ActiveSupport::TestCase
   describe "part 2" do
     describe "solution" do
       let(:data) { puzzle }
-      let(:springscript) {
+      let(:springscript) do
         <<~STR
-        NOT A J
-        NOT B T
-        OR T J
-        NOT C T
-        OR T J
-        AND D J
-        NOT H T
-        NOT T T
-        OR E T
-        AND T J
-        RUN
+          NOT A J
+          NOT B T
+          OR T J
+          NOT C T
+          OR T J
+          AND D J
+          NOT H T
+          NOT T T
+          OR E T
+          AND T J
+          RUN
         STR
-      }
+      end
 
       it "works" do
         answer = ElfComputer.new([], input_data, no_input_mode: :break).run(springscript.chars.map(&:ord)).output
 
-        if answer.last > "Z".ord
-          answer = answer.last
+        answer = if answer.last > "Z".ord
+                   answer.last
         else
-          answer = answer.map(&:chr).join()
+                   answer.map(&:chr).join
         end
 
-        assert_equal(1139528802, answer)
+        assert_equal(1_139_528_802, answer)
       end
     end
   end

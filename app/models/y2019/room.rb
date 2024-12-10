@@ -1,21 +1,21 @@
 class Room
   attr_reader :name, :items, :notes
 
-  def initialize(from_command: nil, room_data:)
+  def initialize(room_data:, from_command: nil)
     parse_room_data(room_data)
 
-    if from_command.present?
-      @go_back_command  = from_command.opposite
-      @visited.delete(@go_back_command)
-    end
+    return unless from_command.present?
+
+    @go_back_command = from_command.opposite
+    @visited.delete(@go_back_command)
   end
 
   def next
-    @visited.find { |k, v| false == v }.first
+    @visited.find { |_k, v| false == v }.first
   end
 
   def next?
-    @visited.any? { |k, v| false == v }
+    @visited.any? { |_k, v| false == v }
   end
 
   def visited!(direction)
@@ -31,6 +31,7 @@ class Room
   end
 
   private
+
   def parse_room_data(data)
     @items   = []
     @notes   = "?"

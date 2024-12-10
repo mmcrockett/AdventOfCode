@@ -1,6 +1,5 @@
 class ExtendedEuclideanAlgorithm
   def self.perform(val_a, val_b)
-    i = 0
     r = [ val_a, val_b ].sort.reverse
     s = [ 1, 0 ]
     t = [ 0, 1 ]
@@ -13,7 +12,7 @@ class ExtendedEuclideanAlgorithm
       t << t[-2] - (q[-1] * t[-1])
     end
 
-    r.each_with_index do |m, i|
+    r.each_with_index do |_m, i|
       puts [ i, q[i], r[i], s[i], t[i] ].join("\t")
     end
 
@@ -22,7 +21,7 @@ class ExtendedEuclideanAlgorithm
       s: s[-1],
       t: t[-1],
       b0: s[-2],
-      b1: t[-2],
+      b1: t[-2]
     )
   end
 end

@@ -3,7 +3,7 @@ module Y2020
     include FileName
 
     EMPTY = "L"
-    OCCUPIED  = "#"
+    OCCUPIED = "#"
     FLOOR = "."
 
     def initialize(file: nil, file_ext: nil)
@@ -135,7 +135,7 @@ module Y2020
     end
 
     def print(grid)
-      puts grid.map { |row| row.join }
+      puts(grid.map { |row| row.join })
     end
 
     def part2
@@ -163,16 +163,16 @@ module Y2020
           end
         end
 
-        if round.present?
-          round += 1
+        next unless round.present?
 
-          expected_data = load_data("/Users/mcrockett/tmp/day11.expected.#{round}").map { |row| row.chars }
+        round += 1
 
-          debugger unless this_round == expected_data
+        expected_data = load_data("/Users/mcrockett/tmp/day11.expected.#{round}").map { |row| row.chars }
 
-          print(expected_data)
-          print(this_round)
-        end
+        debugger unless this_round == expected_data
+
+        print(expected_data)
+        print(this_round)
       end
 
       this_round

@@ -10,11 +10,11 @@ module Y2020
         while false == values.empty?
           v = values.shift
 
-          case v
+          result << case v
           when "s", "n"
-            result << "#{v}#{values.shift}"
+                      "#{v}#{values.shift}"
           else
-            result << v
+                      v
           end
         end
 
@@ -71,7 +71,7 @@ module Y2020
       min_x = grid.each_key.map(&:last).min
       max_x = grid.each_key.map(&:last).max + 1
 
-      even_row_min = grid.find { |k, v| k.last == min_x }.first.first.even?
+      even_row_min = grid.find { |k, _v| k.last == min_x }.first.first.even?
 
       min_x -= 1
 
@@ -91,7 +91,7 @@ module Y2020
     end
 
     def part1
-      grid.select { |k, v| v == "b" }.size
+      grid.select { |_k, v| v == "b" }.size
     end
 
     def part2(days: 100)
@@ -102,7 +102,7 @@ module Y2020
         next_grid = {}
         last_grid = grids.last
 
-        last_grid.select { |k, v| "b" == v }.each do |coord, tile|
+        last_grid.select { |_k, v| "b" == v }.each do |coord, _tile|
           black_friends = 0
 
           (y, x) = coord
@@ -121,7 +121,7 @@ module Y2020
           next_grid[[ y, x ]] = "b" if [ 1, 2 ].include?(black_friends)
         end
 
-        grids << Hash[next_grid.select { |k, v| "b" == v || 2 == v }.map { |k, v| [ k, "b" ] }]
+        grids << Hash[next_grid.select { |_k, v| [ "b", 2 ].include?(v) }.map { |k, _v| [ k, "b" ] }]
       end
 
       grids.last

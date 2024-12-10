@@ -14,11 +14,15 @@ module Y2020
 
     def cube_state(grid, x:, y:, z:)
       return INACTIVE if z < 0 || y < 0 || x < 0 || z >= grid.size || y >= grid[z].size || x >= grid[z][y].size
+
       grid[z][y][x]
     end
 
     def cube_state_w(grid, x:, y:, z:, w:)
-      return INACTIVE if w < 0 || z < 0 || y < 0 || x < 0 || w >= grid.size || z >= grid[w].size || y >= grid[w][z].size || x >= grid[w][z][y].size
+      if w < 0 || z < 0 || y < 0 || x < 0 || w >= grid.size || z >= grid[w].size || y >= grid[w][z].size || x >= grid[w][z][y].size
+        return INACTIVE
+      end
+
       grid[w][z][y][x]
     end
 
@@ -103,7 +107,7 @@ module Y2020
     def part1(n = 1)
       grids = [ @data.dup ]
 
-      n.times do |i|
+      n.times do |_i|
         c_grid   = grids[-1]
         z_size   = c_grid.size
         y_size   = c_grid.first.size
@@ -128,14 +132,22 @@ module Y2020
     def part2(n = 1)
       grids = [ @data.dup ]
 
-      n.times do |i|
+      n.times do |_i|
         c_grid   = grids[-1]
         w_size   = c_grid.size
         z_size   = c_grid.first.size
         y_size   = c_grid.first.first.size
         x_size   = c_grid.first.first.first.size
 
-        new_grid = Array.new(w_size + 2) { Array.new(z_size + 2) { Array.new(y_size + 2) { Array.new(x_size + 2) { INACTIVE } } } }
+        new_grid = Array.new(w_size + 2) do
+          Array.new(z_size + 2) do
+            Array.new(y_size + 2) do
+              Array.new(x_size + 2) do
+                INACTIVE
+              end
+            end
+          end
+        end
 
         (-1..w_size).each do |w|
           (-1..z_size).each do |z|

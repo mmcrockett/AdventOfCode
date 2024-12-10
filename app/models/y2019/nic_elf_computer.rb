@@ -1,7 +1,7 @@
 class NicElfComputer
   attr_reader :output
 
-  PARSEOP = ->(str) {
+  PARSEOP = lambda { |str|
     {
       a: str[-5].to_i,
       b: str[-4].to_i,
@@ -13,7 +13,7 @@ class NicElfComputer
   def initialize(code, network, addr)
     @network = network
     @code    = code.dup
-    @max     = @code.size.freeze
+    @max     = @code.size
     @addr    = addr
     @index   = 0
     @rindex  = 0
@@ -31,7 +31,7 @@ class NicElfComputer
       @empty_count += 1
       sleep(0.05) if 0 == (@empty_count % 1_000)
     else
-      @empty_count  = 0
+      @empty_count = 0
     end
 
     v
@@ -42,13 +42,13 @@ class NicElfComputer
 
     @packet << x
 
-    if 3 == @packet.size
-      addr = @packet.shift
+    return unless 3 == @packet.size
 
-      @network[addr] ||= []
-      @network[addr]  += @packet
-      @packet = []
-    end
+    addr = @packet.shift
+
+    @network[addr] ||= []
+    @network[addr]  += @packet
+    @packet = []
   end
 
   def halted?
@@ -68,12 +68,12 @@ class NicElfComputer
       v1     = @code[a1].to_i
       v2     = @code[a2].to_i
 
-      if 1 == opcode || 2 == opcode
+      if [ 1, 2 ].include?(opcode)
         val  = v1 + v2 if 1 == opcode
         val  = v1 * v2 if 2 == opcode
 
         @code[a3] = val
-      elsif 3 == opcode || 4 == opcode
+      elsif [ 3, 4 ].include?(opcode)
         iplus = 2
 
         if 3 == opcode
@@ -81,21 +81,21 @@ class NicElfComputer
         else
           self << v1
         end
-      elsif 5 == opcode || 6 == opcode
+      elsif [ 5, 6 ].include?(opcode)
         if (0 == v1) && (6 == opcode) || (0 != v1) && (5 == opcode)
           iplus = 0
           @index = v2
         else
           iplus  = 3
         end
-      elsif 7 == opcode || 8 == opcode
-        if (7 == opcode && v1 < v2) || (8 == opcode && v1 == v2)
-          @code[a3] = 1
+      elsif [ 7, 8 ].include?(opcode)
+        @code[a3] = if (7 == opcode && v1 < v2) || (8 == opcode && v1 == v2)
+                      1
         else
-          @code[a3] = 0
+                      0
         end
       elsif 9 == opcode
-        iplus  = 2
+        iplus = 2
         @rindex += v1
       else
         raise "Parsing fail '#{opcode}'."
@@ -108,7 +108,7 @@ class NicElfComputer
   end
 
   def addr(i, mode)
-    idx    = @index + i
+    idx = @index + i
 
     if 1 == mode
       idx

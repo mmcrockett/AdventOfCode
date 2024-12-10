@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Day18Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
   DOOR_TO_KEY = ("a".ord - "A".ord).freeze
 
   def parse_map
@@ -11,13 +11,13 @@ class Day18Test < ActiveSupport::TestCase
     @input_data.each_with_index do |line, y|
       line.each_with_index do |tile, x|
         @entrances[tile + @entrances.size] = [ x, y ] if tile.entrance?
-        @keys[tile]      = [ x, y ] if tile.vault_key?
+        @keys[tile] = [ x, y ] if tile.vault_key?
       end
     end
   end
 
   def breadth_first_search
-    @k2k       = {}
+    @k2k = {}
     @keys.merge(@entrances).each do |key, key_pos|
       queue = [ [ *key_pos, [] ] ]
       distance = { key_pos => 0 }
@@ -37,10 +37,10 @@ class Day18Test < ActiveSupport::TestCase
 
           keys << [ tile, needed_keys, distance[pos] ] if tile.vault_key?
 
-          if tile.vault_door?
-            queue << [ x, y, needed_keys + [ tile + DOOR_TO_KEY ] ]
+          queue << if tile.vault_door?
+                     [ x, y, needed_keys + [ tile + DOOR_TO_KEY ] ]
           else
-            queue << [ x, y, needed_keys ]
+                     [ x, y, needed_keys ]
           end
         end
       end
@@ -56,6 +56,7 @@ class Day18Test < ActiveSupport::TestCase
       @k2k[from_key].each do |key, needed_keys, distance|
         next if unlocked.include?(key)
         next unless (needed_keys - unlocked).empty?
+
         keys << [ runner, key, distance ]
       end
     end
@@ -175,14 +176,14 @@ class Day18Test < ActiveSupport::TestCase
     end
   end
 
-  let(:p1_e0) {
+  let(:p1_e0) do
     <<-STR
     #########
     #b.A.@.a#
     #########
     STR
-  }
-  let(:p1_e1) {
+  end
+  let(:p1_e1) do
     <<-STR
     ########################
     #f.D.E.e.C.b.A.@.a.B.c.#
@@ -190,8 +191,8 @@ class Day18Test < ActiveSupport::TestCase
     #d.....................#
     ########################
     STR
-  }
-  let(:p1_e2) {
+  end
+  let(:p1_e2) do
     <<-STR
     #################
     #i.G..c...e..H.p#
@@ -203,8 +204,8 @@ class Day18Test < ActiveSupport::TestCase
     #l.F..d...h..C.m#
     #################
     STR
-  }
-  let(:p1_e3) {
+  end
+  let(:p1_e3) do
     <<-STR
     ########################
     #@..............ac.GI.b#
@@ -213,8 +214,8 @@ class Day18Test < ActiveSupport::TestCase
     ###g#h#i################
     ########################
     STR
-  }
-  let(:p2_e3) {
+  end
+  let(:p2_e3) do
     <<-STR
     #############
     #g#f.D#..h#l#
@@ -226,7 +227,7 @@ class Day18Test < ActiveSupport::TestCase
     #o#m..#i#jk.#
     #############
     STR
-  }
+  end
   let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) { data.lines.map { |line| line.strip.chomp.chars.map(&:ord) } }
 end

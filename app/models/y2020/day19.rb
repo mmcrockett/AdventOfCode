@@ -39,10 +39,10 @@ module Y2020
           reduce2(rulepart, rules)
         end
 
-        if r1.flatten.join.include?("|")
-          r1 = combine(r1.map { |v| v.split("|") })
+        r1 = if r1.flatten.join.include?("|")
+               combine(r1.map { |v| v.split("|") })
         else
-          r1 = r1.join
+               r1.join
         end
 
         r1

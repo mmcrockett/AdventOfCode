@@ -16,12 +16,12 @@ class NotAlwaysTransmitting
       @network[@addr] = []
     end
 
-    if @network.values.flatten.empty?
-      @sent_y << @packet.last
+    return unless @network.values.flatten.empty?
 
-      @network[0] += @packet
-      @packet = []
-    end
+    @sent_y << @packet.last
+
+    @network[0] += @packet
+    @packet = []
   end
 
   def done?

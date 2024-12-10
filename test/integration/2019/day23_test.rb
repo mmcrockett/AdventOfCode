@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Day23Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   describe "part 1" do
     describe "solution" do
@@ -18,13 +18,11 @@ class Day23Test < ActiveSupport::TestCase
 
         threads = nics.map { |nic| Thread.new { nic.run } }
 
-        while queue[255].nil?
-          sleep 0.5
-        end
+        sleep 0.5 while queue[255].nil?
 
         threads.map(&:kill)
 
-        assert_equal(22650, queue[255].last)
+        assert_equal(22_650, queue[255].last)
       end
     end
   end
@@ -56,8 +54,8 @@ class Day23Test < ActiveSupport::TestCase
         threads.map(&:kill)
 
         assert((start_t + max_t) > Time.now)
-        assert_not_equal(17300, nat.sent_y.last)
-        assert_equal(17298, nat.sent_y.last)
+        assert_not_equal(17_300, nat.sent_y.last)
+        assert_equal(17_298, nat.sent_y.last)
       end
     end
   end

@@ -10,7 +10,7 @@ module Y2015
           name: matcher["name"],
           speed: matcher["speed"].to_i,
           tfly: matcher["tfly"].to_i,
-          trest: matcher["trest"].to_i,
+          trest: matcher["trest"].to_i
         )
       end
     end
@@ -35,7 +35,7 @@ module Y2015
           points[deer.name]   ||= 0
           distance[deer.name] ||= 0
 
-          ttime     = deer.tfly + deer.trest
+          ttime = deer.tfly + deer.trest
 
           distance[deer.name] += deer.speed if (i % ttime) < deer.tfly
         end

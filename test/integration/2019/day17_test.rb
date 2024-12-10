@@ -1,9 +1,9 @@
 require "test_helper"
 
 class Day17Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
-  let(:p) {
-    ->(d) {
+  PUZZLE_FILE = "#{name.underscore}.txt"
+  let(:p) do
+    lambda { |d|
       if d.first.is_a?(Array)
         d.size.times do |y|
           puts ""
@@ -18,11 +18,11 @@ class Day17Test < ActiveSupport::TestCase
         end
       end
     }
-  }
-  let(:p1_answer) {
+  end
+  let(:p1_answer) do
     ElfComputer.new([], input_data).run.output
-  }
-  let(:p1_map) {
+  end
+  let(:p1_map) do
     map = []
     x = 0
     y = 0
@@ -42,7 +42,7 @@ class Day17Test < ActiveSupport::TestCase
     end
 
     map
-  }
+  end
 
   describe "part 1" do
     before do
@@ -61,7 +61,9 @@ class Day17Test < ActiveSupport::TestCase
           p1_map[yi].size.times do |xi|
             next if p1_map[yi][xi].nil?
             next if (xi - 1) < 0 || (xi + 1) >= p1_map[yi].size || (yi - 1) < 0 || (yi + 1) >= p1_map.size
-            next if p1_map[yi][xi - 1].nil? || p1_map[yi][xi + 1].nil? || p1_map[yi + 1][xi].nil? || p1_map[yi - 1][xi].nil?
+            if p1_map[yi][xi - 1].nil? || p1_map[yi][xi + 1].nil? || p1_map[yi + 1][xi].nil? || p1_map[yi - 1][xi].nil?
+              next
+            end
 
             sum += yi * xi
           end
@@ -74,9 +76,13 @@ class Day17Test < ActiveSupport::TestCase
 
   describe "part 2" do
     let(:data) { puzzle.dup }
-    let(:modified) { z = input_data.dup; z[0] = 2; z }
-    let(:is_corner) {
-      ->(map, x, y) {
+    let(:modified) do
+      z = input_data.dup
+      z[0] = 2
+      z
+    end
+    let(:is_corner) do
+      lambda { |map, x, y|
         if map[y][x].nil?
           false
         else
@@ -88,8 +94,8 @@ class Day17Test < ActiveSupport::TestCase
           true != ((left && right) || (up && down))
         end
       }
-    }
-    let(:program) {
+    end
+    let(:program) do
       <<-STR
       A,B,A,A,B,C,B,C,C,B
       L,12,R,8,L,6,R,8,L,6
@@ -97,7 +103,7 @@ class Day17Test < ActiveSupport::TestCase
       L,6,R,6,L,12
       n
       STR
-    }
+    end
 
     describe "solution" do
       before do
@@ -186,7 +192,7 @@ class Day17Test < ActiveSupport::TestCase
         p.call(p1_map) if true == @debug
 
         answer = ElfComputer.new(program.gsub(" ", "").bytes, modified).run.output
-        assert_equal(1415975, answer.last)
+        assert_equal(1_415_975, answer.last)
       end
     end
   end

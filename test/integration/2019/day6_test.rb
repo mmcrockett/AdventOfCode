@@ -1,8 +1,8 @@
 require "test_helper"
 
 class Day6Test < ActiveSupport::TestCase
-  let(:example) {
-    res = <<-STR
+  let(:example) do
+    <<-STR
       COM)B
       B)C
       C)D
@@ -15,9 +15,9 @@ class Day6Test < ActiveSupport::TestCase
       J)K
       K)L
     STR
-  }
-  let(:example2) {
-    res = <<-STR
+  end
+  let(:example2) do
+    <<-STR
       COM)B
       B)C
       C)D
@@ -32,10 +32,10 @@ class Day6Test < ActiveSupport::TestCase
       K)YOU
       I)SAN
     STR
-  }
+  end
   let(:puzzle) { read_test_file(File.join("aoc", "day6_input.txt")) }
   let(:input_data) { data.lines.map { |line| line.chomp.strip.split(")") } }
-  let(:solution0) {
+  let(:solution0) do
     relationships = {}
     current_key   = "COM"
 
@@ -45,17 +45,16 @@ class Day6Test < ActiveSupport::TestCase
     end
 
     distance(relationships, current_key, 0)
-  }
-  let(:solution1) {
+  end
+  let(:solution1) do
     relationships = {}
-    current_key   = "COM"
-    paths         = []
+    paths = []
 
     input_data.each do |orbitee, orbiter|
       relationships[orbiter] = orbitee
     end
 
-    [ "SAN", "YOU" ].each do |person|
+    %w[SAN YOU].each do |person|
       paths << []
 
       orbitee = relationships[person]
@@ -70,7 +69,7 @@ class Day6Test < ActiveSupport::TestCase
     diverge_loc = paths.first.find { |sloc| paths.last.include?(sloc) }
 
     paths.first.find_index { |sloc| diverge_loc == sloc } + paths.last.find_index { |mloc| diverge_loc == mloc }
-  }
+  end
 
   def distance(d, k, dist)
     orbits = d[k]
@@ -95,7 +94,7 @@ class Day6Test < ActiveSupport::TestCase
       let(:data) { puzzle }
 
       it "works" do
-        assert_equal(273985, solution0)
+        assert_equal(273_985, solution0)
       end
     end
   end

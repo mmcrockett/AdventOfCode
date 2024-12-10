@@ -3,7 +3,7 @@ module Y2015
     include FileName
 
     def initialize(file: nil, file_ext: nil)
-      @data     = load_data(file_name(file: file, file_ext: file_ext))
+      @data = load_data(file_name(file: file, file_ext: file_ext))
     end
 
     def load_data(file)

@@ -16,7 +16,8 @@ module Y2020
 
     def play!(hand0, hand1)
       while false == hand0.empty? && false == hand1.empty?
-        (card0, card1) = [ hand0.shift, hand1.shift ]
+        card0 = hand0.shift
+        card1 = hand1.shift
 
         if card0 > card1
           hand0 << card0 << card1
@@ -34,12 +35,16 @@ module Y2020
       seen_hands = {}
 
       while false == hand1.empty? && false == hand2.empty?
-        return [ [ "player 1 win" ], [] ] if seen_hands.include?("p1_#{hand1.join('_')}") || seen_hands.include?("p2_#{hand2.join('_')}")
+        if seen_hands.include?("p1_#{hand1.join('_')}") || seen_hands.include?("p2_#{hand2.join('_')}")
+          return [ [ "player 1 win" ],
+                  [] ]
+        end
 
         seen_hands["p1_#{hand1.join('_')}"] = true
         seen_hands["p2_#{hand2.join('_')}"] = true
 
-        (card1, card2) = [ hand1.shift, hand2.shift ]
+        card1 = hand1.shift
+        card2 = hand2.shift
 
         if hand1.size >= card1 && hand2.size >= card2
           (r1, r2) = recursive_play!(hand1[0, card1], hand2[0, card2])
@@ -51,14 +56,12 @@ module Y2020
           else
             raise "Recursive ended prematurely"
           end
+        elsif card1 > card2
+          hand1 << card1 << card2
+        elsif card2 > card1
+          hand2 << card2 << card1
         else
-          if card1 > card2
-            hand1 << card1 << card2
-          elsif card2 > card1
-            hand2 << card2 << card1
-          else
-            raise "#{card1}:#{card2}"
-          end
+          raise "#{card1}:#{card2}"
         end
       end
 

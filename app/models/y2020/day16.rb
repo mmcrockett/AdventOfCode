@@ -72,12 +72,22 @@ module Y2020
 
     def part2
       solved = {}
-      possible_answers = Hash[@rules.keys.size.times.map { |i| [ i, valid_tickets_to_options.map { |r| r[i] }.reduce(&:&) ] }]
+      possible_answers = Hash[@rules.keys.size.times.map do |i|
+        [ i, valid_tickets_to_options.map do |r|
+          r[i]
+        end.reduce(&:&) ]
+      end]
 
       while departure_keys(solved).size != rules_departure_keys.size
-        one_answer = possible_answers.select { |ki, answer| 1 == answer.size }
-        one_option = possible_answers.values.flatten.group_by { |answer| answer }.select { |value, values| 1 == values.size }
-        one_option = Hash[one_option.keys.map { |option| [ possible_answers.find { |k, v| v.include?(option) }.first, option ] }]
+        one_answer = possible_answers.select { |_ki, answer| 1 == answer.size }
+        one_option = possible_answers.values.flatten.group_by do |answer|
+          answer
+        end.select { |_value, values| 1 == values.size }
+        one_option = Hash[one_option.keys.map do |option|
+          [ possible_answers.find do |_k, v|
+            v.include?(option)
+          end.first, option ]
+        end]
 
         one_option.each do |ki, answer|
           solved[answer] = ki
@@ -87,7 +97,7 @@ module Y2020
         one_answer.each do |ki, answer|
           solved[answer.last] = ki
 
-          possible_answers.each do |k, v|
+          possible_answers.each do |_k, v|
             v.delete(answer.last)
           end
         end

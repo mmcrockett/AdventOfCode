@@ -29,9 +29,7 @@ module Y2020
         input = input.rotate
       end
 
-      while 1 != input[0]
-        input = input.rotate
-      end
+      input = input.rotate while 1 != input[0]
 
       input[1..-1].join
     end
@@ -79,7 +77,7 @@ module Y2020
 
         list[start_v] = list[pick_up.last]
         list[pick_up.last] = list[new_v]
-        list[new_v]   = pick_up.first
+        list[new_v] = pick_up.first
         next_v = list[start_v]
       end
 

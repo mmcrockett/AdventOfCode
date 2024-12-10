@@ -28,7 +28,7 @@ class Day9Test < ActiveSupport::TestCase
       let(:data) { p1_e2 }
 
       it "works" do
-        assert_equal(1125899906842624, ElfComputer.new([], input_data).run.output.last)
+        assert_equal(1_125_899_906_842_624, ElfComputer.new([], input_data).run.output.last)
       end
     end
 
@@ -36,7 +36,7 @@ class Day9Test < ActiveSupport::TestCase
       let(:data) { puzzle }
 
       it "works" do
-        assert_equal([ 3906448201 ], ElfComputer.new(1, input_data).run.output)
+        assert_equal([ 3_906_448_201 ], ElfComputer.new(1, input_data).run.output)
       end
     end
   end

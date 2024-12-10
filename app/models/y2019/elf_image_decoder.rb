@@ -17,6 +17,7 @@ class ElfImageDecoder
   end
 
   private
+
   def parse_pixels(d, w, h)
     index = 0
     result = []

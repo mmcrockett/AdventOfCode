@@ -1,34 +1,34 @@
 require "test_helper"
 
 class Day22Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   describe "part 1" do
-    let(:deal) {
-      ->(cards, n) {
+    let(:deal) do
+      lambda { |cards, _n|
         cards.reverse
       }
-    }
-    let(:cut) {
-      ->(cards, n) {
+    end
+    let(:cut) do
+      lambda { |cards, n|
         cards.rotate(n)
       }
-    }
-    let(:increment) {
-      ->(cards, n) {
+    end
+    let(:increment) do
+      lambda { |cards, n|
         new_cards = []
 
         cards.size.times { |t| new_cards[(t * n) % cards.size] = cards[t] }
         new_cards
       }
-    }
-    let(:answer) {
+    end
+    let(:answer) do
       results = deck.dup
       input_data.each do |c, n|
         results = send(c).call(results, n)
       end
       results
-    }
+    end
 
     describe "examples" do
       let(:deck) { 10.times.to_a }
@@ -68,7 +68,7 @@ class Day22Test < ActiveSupport::TestCase
 
     describe "solution" do
       let(:data) { puzzle }
-      let(:deck) { 10007.times.to_a }
+      let(:deck) { 10_007.times.to_a }
 
       it "works" do
         assert_equal(4684, answer.find_index(2019))
@@ -82,8 +82,8 @@ class Day22Test < ActiveSupport::TestCase
 
   describe "part 2" do
     let(:data) { puzzle.dup }
-    let(:reduce) {
-      ->(l, rules) {
+    let(:reduce) do
+      lambda { |_l, rules|
         a = 1
         b = 0
 
@@ -110,12 +110,9 @@ class Day22Test < ActiveSupport::TestCase
 
         [ a, b ]
       }
-    }
-    let(:polypow) {
-      ->(a, b, m, n) {
-        new_inc = 1
-        new_off = 0
-
+    end
+    let(:polypow) do
+      lambda { |a, b, m, n|
         if 0 == m
           [ 1, 0 ]
         elsif m.even?
@@ -125,28 +122,28 @@ class Day22Test < ActiveSupport::TestCase
           [ a * c % n, ((a * d) + b) % n ]
         end
       }
-    }
-    let(:answer) {
+    end
+    let(:answer) do
       p = 2020
 
       (a, b) = reduce.call(deck_size, input_data)
 
-      assert_equal(8067652995194, a) if @check_intermediate
-      assert_equal(90670298010248, b) if @check_intermediate
+      assert_equal(8_067_652_995_194, a) if @check_intermediate
+      assert_equal(90_670_298_010_248, b) if @check_intermediate
 
       ma = a.pow(shuffles, deck_size)
 
-      assert_equal(71126595274540, ma) if @check_intermediate
+      assert_equal(71_126_595_274_540, ma) if @check_intermediate
 
       mb = (b * (ma - 1) * (a - 1).pow(deck_size - 2, deck_size)) % deck_size
 
-      assert_equal(26522924041810, mb) if @check_intermediate
+      assert_equal(26_522_924_041_810, mb) if @check_intermediate
 
       ((p - mb) * ma.pow(deck_size - 2, deck_size)) % deck_size
-    }
+    end
 
     describe "test part 1 works" do
-      let(:deck_size) { 10007 }
+      let(:deck_size) { 10_007 }
       let(:shuffles) { 1 }
 
       it "works" do
@@ -155,53 +152,53 @@ class Day22Test < ActiveSupport::TestCase
     end
 
     describe "solution" do
-      let(:deck_size) { 119315717514047 }
+      let(:deck_size) { 119_315_717_514_047 }
       let(:shuffles) { 101_741_582_076_661 }
 
       it "works" do
         @check_intermediate = true
-        assert_equal(452290953297, answer)
+        assert_equal(452_290_953_297, answer)
       end
     end
   end
 
-  let(:p1_e0) {
+  let(:p1_e0) do
     <<~STR
-    deal with increment 7
-    deal into new stack
-    deal into new stack
+      deal with increment 7
+      deal into new stack
+      deal into new stack
     STR
-  }
-  let(:p1_e1) {
+  end
+  let(:p1_e1) do
     <<~STR
-    cut 6
-    deal with increment 7
-    deal into new stack
+      cut 6
+      deal with increment 7
+      deal into new stack
     STR
-  }
-  let(:p1_e2) {
+  end
+  let(:p1_e2) do
     <<~STR
-    deal with increment 7
-    deal with increment 9
-    cut -2
+      deal with increment 7
+      deal with increment 9
+      cut -2
     STR
-  }
-  let(:p1_e3) {
+  end
+  let(:p1_e3) do
     <<~STR
-    deal into new stack
-    cut -2
-    deal with increment 7
-    cut 8
-    cut -4
-    deal with increment 7
-    cut 3
-    deal with increment 9
-    deal with increment 3
-    cut -1
+      deal into new stack
+      cut -2
+      deal with increment 7
+      cut 8
+      cut -4
+      deal with increment 7
+      cut 3
+      deal with increment 9
+      deal with increment 3
+      cut -1
     STR
-  }
+  end
   let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
-  let(:input_data) {
+  let(:input_data) do
     commands = []
     data.lines.map(&:chomp).each do |line|
       if line.end_with?("new stack")
@@ -215,5 +212,5 @@ class Day22Test < ActiveSupport::TestCase
       end
     end
     commands
-  }
+  end
 end

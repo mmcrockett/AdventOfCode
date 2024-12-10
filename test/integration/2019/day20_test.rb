@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Day20Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   def parse_map(input)
     portals  = {}
@@ -32,12 +32,12 @@ class Day20Test < ActiveSupport::TestCase
               portals[key] = Dijkstra::Node.new(key, x: x, y: y)
             end
 
-            if "AA" == key
-              row << "S".ord
+            row << if "AA" == key
+                     "S".ord
             elsif "ZZ" == key
-              row << "F".ord
+                     "F".ord
             else
-              row << "P".ord
+                     "P".ord
             end
           else
             row << tile
@@ -57,12 +57,12 @@ class Day20Test < ActiveSupport::TestCase
     end
 
     portals.each do |k, v|
-      if [ "AA", "ZZ" ].include?(k)
-        v.z = 0
+      v.z = if %w[AA ZZ].include?(k)
+              0
       elsif v.x > top_left.first && v.y > top_left.last && v.x < bot_right.first && v.y < bot_right.last
-        v.z = 1
+              1
       else
-        v.z = -1
+              -1
       end
     end
 
@@ -72,7 +72,7 @@ class Day20Test < ActiveSupport::TestCase
   def bfs(portals, map)
     edges = []
 
-    portals.each do |name, node|
+    portals.each do |_name, node|
       queue = [ node.coord ]
       distance = { node.coord => 0 }
 
@@ -89,7 +89,7 @@ class Day20Test < ActiveSupport::TestCase
           distance[pos] = distance[[ from_x, from_y ]] + 1
 
           if tile.portal?
-            other_node = portals.find { |k, v| v.coord == pos }.last
+            other_node = portals.find { |_k, v| v.coord == pos }.last
 
             raise if other_node.nil?
 
@@ -105,14 +105,24 @@ class Day20Test < ActiveSupport::TestCase
   end
 
   describe "part 1" do
-    let(:answer) {
+    let(:answer) do
       (portals, map) = parse_map(input_data)
-      edges  = bfs(portals, map)
-      portals.values.group_by { |node| node.name.delete("x") }.each { |pairs| edges << [ pairs.last[0], pairs.last[1], 1 ] if 2 == pairs.last.size }
-      edges.each { |n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
+      edges = bfs(portals, map)
+      portals.values.group_by do |node|
+        node.name.delete("x")
+      end.each do |pairs|
+        if 2 == pairs.last.size
+          edges << [ pairs.last[0],
+                    pairs.last[1], 1 ]
+        end
+      end
+      edges.each do |n0, n1, d|
+        n0.add_neighbor(n1, d)
+        n1.add_neighbor(n0, d)
+      end
 
       Dijkstra::ShortestPath.new(portals.values, portals["AA"]).shortest_distance_to(portals["ZZ"])
-    }
+    end
 
     describe "example 0" do
       let(:data) { p1_e0 }
@@ -141,9 +151,8 @@ class Day20Test < ActiveSupport::TestCase
 
   describe "part 2" do
     def bfs2(portals, map)
-      start  = portals.delete("AA")
-      finish = portals.delete("ZZ")
-      paths  = []
+      start = portals.delete("AA")
+      portals.delete("ZZ")
 
       (start + portals.values).each do |node|
         queue = [ node.coord ]
@@ -163,7 +172,7 @@ class Day20Test < ActiveSupport::TestCase
             distance[pos] = distance[[ from_x, from_y ]] + 1
 
             if tile.portal?
-              other_node = portals.find { |k, v| v.coord == pos }.last
+              other_node = portals.find { |_k, v| v.coord == pos }.last
 
               raise if other_node.nil?
 
@@ -178,29 +187,34 @@ class Day20Test < ActiveSupport::TestCase
       edges
     end
 
-    let(:answer) {
+    let(:answer) do
       (portals, map) = parse_map(input_data)
-      edges  = bfs(portals, map)
-      portals.values.group_by { |node| node.name.delete("x") }.each { |pairs| edges << [ pairs.last[0], pairs.last[1], 1 ] if 2 == pairs.last.size }
-      edges.each { |n0, n1, d| n0.add_neighbor(n1, d); n1.add_neighbor(n0, d) }
+      edges = bfs(portals, map)
+      portals.values.group_by do |node|
+        node.name.delete("x")
+      end.each do |pairs|
+        if 2 == pairs.last.size
+          edges << [ pairs.last[0],
+                    pairs.last[1], 1 ]
+        end
+      end
+      edges.each do |n0, n1, d|
+        n0.add_neighbor(n1, d)
+        n1.add_neighbor(n0, d)
+      end
 
-      p = []
-      counts = {}
-
-      start  = portals["AA"]
-      finish = portals["ZZ"]
+      start = portals["AA"]
+      portals["ZZ"]
       queue  = []
       found  = {}
 
-      queue  << start
+      queue << start
       found[start] = true
 
-      while queue.any?
-        v = queue.shift
-      end
+      queue.shift while queue.any?
 
       11
-    }
+    end
 
     describe "p1 example" do
       let(:data) { p1_e0 }
@@ -229,112 +243,112 @@ class Day20Test < ActiveSupport::TestCase
     end
   end
 
-  let(:p1_e0) {
-    <<-STR
-         A#{'           '}
-         A#{'           '}
-  #######.##########{'  '}
-  #######.........##{'  '}
-  #######.#######.##{'  '}
-  #######.#######.##{'  '}
-  #######.#######.##{'  '}
-  #####  B    ###.##{'  '}
-BC...##  C    ###.##{'  '}
-  ##.##       ###.##{'  '}
-  ##...DE  F  ###.##{'  '}
-  #####    G  ###.##{'  '}
-  #########.#####.##{'  '}
-DE..#######...###.##{'  '}
-  #.#########.###.##{'  '}
-FG..#########.....##{'  '}
-  ###########.######{'  '}
-             Z#{'       '}
-             Z#{'      '}
+  let(:p1_e0) do
+    <<~STR
+               A#{'           '}
+               A#{'           '}
+        #######.##########{'  '}
+        #######.........##{'  '}
+        #######.#######.##{'  '}
+        #######.#######.##{'  '}
+        #######.#######.##{'  '}
+        #####  B    ###.##{'  '}
+      BC...##  C    ###.##{'  '}
+        ##.##       ###.##{'  '}
+        ##...DE  F  ###.##{'  '}
+        #####    G  ###.##{'  '}
+        #########.#####.##{'  '}
+      DE..#######...###.##{'  '}
+        #.#########.###.##{'  '}
+      FG..#########.....##{'  '}
+        ###########.######{'  '}
+                   Z#{'       '}
+                   Z#{'      '}
     STR
-  }
+  end
 
-  let(:p1_e1) {
-    <<-STR
-                   A#{'               '}
-                   A#{'               '}
-  #################.##############{'  '}
-  #.#...#...................#.#.##{'  '}
-  #.#.#.###.###.###.#########.#.##{'  '}
-  #.#.#.......#...#.....#.#.#...##{'  '}
-  #.#########.###.#####.#.#.###.##{'  '}
-  #.............#.#.....#.......##{'  '}
-  ###.###########.###.#####.#.#.##{'  '}
-  #.....#        A   C    #.#.#.##{'  '}
-  #######        S   P    #####.##{'  '}
-  #.#...#                 #......VT
-  #.#.#.#                 #.######{'  '}
-  #...#.#               YN....#.##{'  '}
-  #.###.#                 #####.##{'  '}
-DI....#.#                 #.....##{'  '}
-  #####.#                 #.###.##{'  '}
-ZZ......#               QG....#..AS
-  ###.###                 ########{'  '}
-JO..#.#.#                 #.....##{'  '}
-  #.#.#.#                 ###.#.##{'  '}
-  #...#..DI             BU....#..LF
-  #####.#                 #.######{'  '}
-YN......#               VT..#....QG
-  #.###.#                 #.###.##{'  '}
-  #.#...#                 #.....##{'  '}
-  ###.###    J L     J    #.#.####{'  '}
-  #.....#    O F     P    #.#...##{'  '}
-  #.###.#####.#.#####.#####.###.##{'  '}
-  #...#.#.#...#.....#.....#.#...##{'  '}
-  #.#####.###.###.#.#.#########.##{'  '}
-  #...#.#.....#...#.#.#.#.....#.##{'  '}
-  #.###.#####.###.###.#.#.########{'  '}
-  #.#.........#...#.............##{'  '}
-  #########.###.###.##############{'  '}
-           B   J   C#{'               '}
-           U   P   P#{'               '}
+  let(:p1_e1) do
+    <<~STR
+                         A#{'               '}
+                         A#{'               '}
+        #################.##############{'  '}
+        #.#...#...................#.#.##{'  '}
+        #.#.#.###.###.###.#########.#.##{'  '}
+        #.#.#.......#...#.....#.#.#...##{'  '}
+        #.#########.###.#####.#.#.###.##{'  '}
+        #.............#.#.....#.......##{'  '}
+        ###.###########.###.#####.#.#.##{'  '}
+        #.....#        A   C    #.#.#.##{'  '}
+        #######        S   P    #####.##{'  '}
+        #.#...#                 #......VT
+        #.#.#.#                 #.######{'  '}
+        #...#.#               YN....#.##{'  '}
+        #.###.#                 #####.##{'  '}
+      DI....#.#                 #.....##{'  '}
+        #####.#                 #.###.##{'  '}
+      ZZ......#               QG....#..AS
+        ###.###                 ########{'  '}
+      JO..#.#.#                 #.....##{'  '}
+        #.#.#.#                 ###.#.##{'  '}
+        #...#..DI             BU....#..LF
+        #####.#                 #.######{'  '}
+      YN......#               VT..#....QG
+        #.###.#                 #.###.##{'  '}
+        #.#...#                 #.....##{'  '}
+        ###.###    J L     J    #.#.####{'  '}
+        #.....#    O F     P    #.#...##{'  '}
+        #.###.#####.#.#####.#####.###.##{'  '}
+        #...#.#.#...#.....#.....#.#...##{'  '}
+        #.#####.###.###.#.#.#########.##{'  '}
+        #...#.#.....#...#.#.#.#.....#.##{'  '}
+        #.###.#####.###.###.#.#.########{'  '}
+        #.#.........#...#.............##{'  '}
+        #########.###.###.##############{'  '}
+                 B   J   C#{'               '}
+                 U   P   P#{'               '}
     STR
-  }
-  let(:p2_e0) {
-    <<-STR
-             Z L X W       C#{'                 '}
-             Z P Q B       K#{'                 '}
-  ###########.#.#.#.#######.################{'  '}
-  #...#.......#.#.......#.#.......#.#.#...##{'  '}
-  ###.#.#.#.#.#.#.#.###.#.#.#######.#.#.####{'  '}
-  #.#...#.#.#...#.#.#...#...#...#.#.......##{'  '}
-  #.###.#######.###.###.#.###.###.#.########{'  '}
-  #...#.......#.#...#...#.............#...##{'  '}
-  #.#########.#######.#.#######.#######.####{'  '}
-  #...#.#    F       R I       Z    #.#.#.##{'  '}
-  #.###.#    D       E C       H    #.#.#.##{'  '}
-  #.#...#                           #...#.##{'  '}
-  #.###.#                           #.###.##{'  '}
-  #.#....OA                       WB..#.#..ZH
-  #.###.#                           #.#.#.##{'  '}
-CJ......#                           #.....##{'  '}
-  #######                           ########{'  '}
-  #.#....CK                         #......IC
-  #.###.#                           #.###.##{'  '}
-  #.....#                           #...#.##{'  '}
-  ###.###                           #.#.#.##{'  '}
-XF....#.#                         RF..#.#.##{'  '}
-  #####.#                           ########{'  '}
-  #......CJ                       NM..#...##{'  '}
-  ###.#.#                           #.###.##{'  '}
-RE....#.#                           #......RF
-  ###.###        X   X       L      #.#.#.##{'  '}
-  #.....#        F   Q       P      #.#.#.##{'  '}
-  ###.###########.###.#######.#########.####{'  '}
-  #.....#...#.....#.......#...#.....#.#...##{'  '}
-  #####.#.###.#######.#######.###.###.#.#.##{'  '}
-  #.......#.......#.#.#.#.#...#...#...#.#.##{'  '}
-  #####.###.#####.#.#.#.#.###.###.#.###.####{'  '}
-  #.......#.....#.#...#...............#...##{'  '}
-  #############.#.#.###.####################{'  '}
-               A O F   N#{'                     '}
-               A A D   M#{'                     '}
-  STR
-  }
+  end
+  let(:p2_e0) do
+    <<~STR
+                   Z L X W       C#{'                 '}
+                   Z P Q B       K#{'                 '}
+        ###########.#.#.#.#######.################{'  '}
+        #...#.......#.#.......#.#.......#.#.#...##{'  '}
+        ###.#.#.#.#.#.#.#.###.#.#.#######.#.#.####{'  '}
+        #.#...#.#.#...#.#.#...#...#...#.#.......##{'  '}
+        #.###.#######.###.###.#.###.###.#.########{'  '}
+        #...#.......#.#...#...#.............#...##{'  '}
+        #.#########.#######.#.#######.#######.####{'  '}
+        #...#.#    F       R I       Z    #.#.#.##{'  '}
+        #.###.#    D       E C       H    #.#.#.##{'  '}
+        #.#...#                           #...#.##{'  '}
+        #.###.#                           #.###.##{'  '}
+        #.#....OA                       WB..#.#..ZH
+        #.###.#                           #.#.#.##{'  '}
+      CJ......#                           #.....##{'  '}
+        #######                           ########{'  '}
+        #.#....CK                         #......IC
+        #.###.#                           #.###.##{'  '}
+        #.....#                           #...#.##{'  '}
+        ###.###                           #.#.#.##{'  '}
+      XF....#.#                         RF..#.#.##{'  '}
+        #####.#                           ########{'  '}
+        #......CJ                       NM..#...##{'  '}
+        ###.#.#                           #.###.##{'  '}
+      RE....#.#                           #......RF
+        ###.###        X   X       L      #.#.#.##{'  '}
+        #.....#        F   Q       P      #.#.#.##{'  '}
+        ###.###########.###.#######.#########.####{'  '}
+        #.....#...#.....#.......#...#.....#.#...##{'  '}
+        #####.#.###.#######.#######.###.###.#.#.##{'  '}
+        #.......#.......#.#.#.#.#...#...#...#.#.##{'  '}
+        #####.###.#####.#.#.#.#.###.###.#.###.####{'  '}
+        #.......#.....#.#...#...............#...##{'  '}
+        #############.#.#.###.####################{'  '}
+                     A O F   N#{'                     '}
+                     A A D   M#{'                     '}
+    STR
+  end
   let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) { data.lines.map { |line| line.chomp.chars.map(&:ord) } }
 end

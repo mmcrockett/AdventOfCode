@@ -1,7 +1,7 @@
 require "test_helper"
 
 class Day13Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   describe "part 1" do
     describe "solution" do
@@ -25,7 +25,11 @@ class Day13Test < ActiveSupport::TestCase
   describe "part 2" do
     describe "solution" do
       let(:data) { puzzle }
-      let(:free_play) { fp = input_data.dup; fp[0] = 2; fp }
+      let(:free_play) do
+        fp = input_data.dup
+        fp[0] = 2
+        fp
+      end
       let(:ec) { ElfComputer.new([], free_play, no_input_mode: :break) }
       let(:show_display) { false }
 
@@ -52,7 +56,7 @@ class Day13Test < ActiveSupport::TestCase
             end
           end
 
-          screen.each_with_index do |line, y|
+          screen.each_with_index do |line, _y|
             puts "" if show_display
 
             line.each_with_index do |v, x|
@@ -72,7 +76,7 @@ class Day13Test < ActiveSupport::TestCase
           move = 0 if paddle_x == ball_x
         end
 
-        assert_equal(20940, score)
+        assert_equal(20_940, score)
       end
     end
   end

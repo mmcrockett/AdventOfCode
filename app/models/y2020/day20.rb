@@ -14,10 +14,10 @@ module Y2020
     end
 
     def <<(line)
-      if line.is_a?(String)
-        @d << line.chars
+      @d << if line.is_a?(String)
+              line.chars
       else
-        @d << line
+              line
       end
     end
 
@@ -31,7 +31,8 @@ module Y2020
     end
 
     def match?(other_tile)
-      return false if other_tile.id == self.id
+      return false if other_tile.id == id
+
       other_tile.edges.any? { |other_edge| edges.include?(other_edge) }
     end
 
@@ -80,7 +81,7 @@ module Y2020
     end
 
     def connect_to(other_tile)
-      raise "Can't combine unconnected tiles" unless self.connections.include?(other_tile)
+      raise "Can't combine unconnected tiles" unless connections.include?(other_tile)
 
       dirs = %i[top bottom left right].freeze
 
@@ -97,52 +98,52 @@ module Y2020
                       :top
           end
 
-          if self.send(a_dir) == other_tile.send(b_dir)
+          if send(a_dir) == other_tile.send(b_dir)
             puts "Connect #{self} #{a_dir} to #{other_tile} #{b_dir}"
 
             case [ a_dir, b_dir ]
-            when [ :top, :bottom ], [ :bottom, :top ], [ :right, :left ], [ :left, :right ]
+            when %i[top bottom], %i[bottom top], %i[right left], %i[left right]
               # All good
-            when [ :top, :top ], [ :bottom, :bottom ]
+            when %i[top top], %i[bottom bottom]
               other_tile.flip
-            when [ :right, :right ], [ :left, :left ]
+            when %i[right right], %i[left left]
               other_tile.flip.rotate.rotate
-            when [ :top, :left ], [ :bottom, :right ]
+            when %i[top left], %i[bottom right]
               other_tile.rotate.rotate.rotate
-            when [ :left, :bottom ], [ :right, :top ]
+            when %i[left bottom], %i[right top]
               other_tile.rotate.rotate.rotate.flip
-            when [ :top, :right ], [ :bottom, :left ]
+            when %i[top right], %i[bottom left]
               other_tile.rotate.rotate.rotate.flip
-            when [ :left, :top ], [ :right, :bottom ]
+            when %i[left top], %i[right bottom]
               other_tile.rotate
             end
 
-            debugger unless self.send(a_dir) == other_tile.send(new_dir)
-            raise "wrong translation" unless self.send(a_dir) == other_tile.send(new_dir)
+            debugger unless send(a_dir) == other_tile.send(new_dir)
+            raise "wrong translation" unless send(a_dir) == other_tile.send(new_dir)
 
             return a_dir
-          elsif self.send(a_dir) == other_tile.send(b_dir).reverse
+          elsif send(a_dir) == other_tile.send(b_dir).reverse
             puts "Connect #{self} #{a_dir} to #{other_tile} #{b_dir} reversed"
 
             case [ a_dir, b_dir ]
-            when [ :right, :left ], [ :left, :right ]
+            when %i[right left], %i[left right]
               other_tile.flip
-            when [ :top, :bottom ], [ :bottom, :top ]
+            when %i[top bottom], %i[bottom top]
               other_tile.flip.rotate.rotate
-            when [ :top, :top ], [ :bottom, :bottom ], [ :right, :right ], [ :left, :left ]
+            when %i[top top], %i[bottom bottom], %i[right right], %i[left left]
               other_tile.rotate.rotate
-            when [ :top, :left ], [ :bottom, :right ]
+            when %i[top left], %i[bottom right]
               other_tile.rotate.rotate.rotate.flip
-            when [ :left, :bottom ], [ :right, :top ]
+            when %i[left bottom], %i[right top]
               other_tile.rotate.rotate.rotate
-            when [ :top, :right ], [ :bottom, :left ]
+            when %i[top right], %i[bottom left]
               other_tile.rotate
-            when [ :left, :top ], [ :right, :bottom ]
+            when %i[left top], %i[right bottom]
               other_tile.rotate.flip
             end
 
-            debugger unless self.send(a_dir) == other_tile.send(new_dir)
-            raise "wrong translation" unless self.send(a_dir) == other_tile.send(new_dir)
+            debugger unless send(a_dir) == other_tile.send(new_dir)
+            raise "wrong translation" unless send(a_dir) == other_tile.send(new_dir)
 
             return a_dir
           end
@@ -167,12 +168,13 @@ module Y2020
     end
 
     private
+
     def build_edges
       @edges = []
-      @edges << self.top
-      @edges << self.left
-      @edges << self.bottom
-      @edges << self.right
+      @edges << top
+      @edges << left
+      @edges << bottom
+      @edges << right
 
       @edges = @edges.map { |edge| [ edge, edge.reverse ] }.flatten
     end
@@ -214,7 +216,10 @@ module Y2020
           puts "#{row.map(&:id).join(' ')}"
         else
           (0..row.first.size - 1).each do |y_i|
-            row.each { |tile| print(tile.d[y_i].join); print(" ") }
+            row.each do |tile|
+              print(tile.d[y_i].join)
+              print(" ")
+            end
             puts
           end
           puts
@@ -350,17 +355,17 @@ module Y2020
 
     def part2(debug = false)
       @debug = debug
-      self.part1 if @tiles.first.connections.empty?
+      part1 if @tiles.first.connections.empty?
 
       case @debug
       when true
-        self.debug_assemble
+        debug_assemble
       when false
         tile = @tiles.find { |stile| stile.id == 1951 }
         @tiles.delete(tile)
         tile.flip
         @tiles.unshift(tile)
-        self.assemble
+        assemble
       end
 
       display_tiles

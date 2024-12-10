@@ -6,7 +6,7 @@ class String
     dup_match  = []
     trip_match = false
 
-    self.chars do |c|
+    chars do |c|
       return false if c.in?(BAD_CHARS)
 
       recent << c
@@ -30,9 +30,7 @@ module Y2015
     INPUT = "hxbxwxba"
 
     def self.next_password(str)
-      while false == str.advent_valid?
-        str = str.next
-      end
+      str = str.next while false == str.advent_valid?
 
       str
     end

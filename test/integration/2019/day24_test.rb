@@ -1,13 +1,13 @@
 require "test_helper"
 
 class Day24Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   let(:directions) { ([ 1, 0 ].permutation.to_a + [ -1, 0 ].permutation.to_a).freeze }
-  let(:biodiversity) {
-    ->(grid) {
+  let(:biodiversity) do
+    lambda { |grid|
       answer = 0
-      l      = grid.size.freeze
+      l      = grid.size
 
       l.times do |y|
         l.times do |x|
@@ -17,10 +17,10 @@ class Day24Test < ActiveSupport::TestCase
 
       answer
     }
-  }
-  let(:print_grid) {
-    ->(grid, recursive = false) {
-      l = grid.size.freeze
+  end
+  let(:print_grid) do
+    lambda { |grid, recursive = false|
+      l = grid.size
 
       l.times do |y|
         puts ""
@@ -36,13 +36,13 @@ class Day24Test < ActiveSupport::TestCase
 
       puts ""
     }
-  }
+  end
 
   describe "part 1" do
-    let(:life) {
-      ->(grid) {
+    let(:life) do
+      lambda { |grid|
         new_grid = []
-        l = grid.size.freeze
+        l = grid.size
 
         l.times do |y|
           new_grid[y] ||= []
@@ -56,23 +56,23 @@ class Day24Test < ActiveSupport::TestCase
 
             adj_bugs = adj_bugs.map(&:to_i).sum
 
-            if 1 == adj_bugs || (2 == adj_bugs && grid[y][x].opening?)
-              new_grid[y][x] = "#".ord
+            new_grid[y][x] = if 1 == adj_bugs || (2 == adj_bugs && grid[y][x].opening?)
+                               "#".ord
             else
-              new_grid[y][x] = ".".ord
+                               ".".ord
             end
           end
         end
 
         new_grid
       }
-    }
+    end
 
     describe "biodiversity" do
       let(:data) { p1_e0_answer }
 
       it "works" do
-        assert_equal(2129920, biodiversity.call(input_data))
+        assert_equal(2_129_920, biodiversity.call(input_data))
       end
     end
 
@@ -90,7 +90,7 @@ class Day24Test < ActiveSupport::TestCase
           biod = biodiversity.call(cmap)
         end
 
-        assert_equal(2129920, biod)
+        assert_equal(2_129_920, biod)
       end
     end
 
@@ -108,14 +108,14 @@ class Day24Test < ActiveSupport::TestCase
           biod = biodiversity.call(cmap)
         end
 
-        assert_equal(18407158, biod)
+        assert_equal(18_407_158, biod)
       end
     end
   end
 
   describe "part 2" do
-    let(:life) {
-      ->(grids) {
+    let(:life) do
+      lambda { |grids|
         new_grids = []
 
         grids.each_with_index do |grid, z|
@@ -127,10 +127,10 @@ class Day24Test < ActiveSupport::TestCase
             l.times do |x|
               adj_bug_count = adj_bugs.call(x, y, z, grids)
 
-              if 1 == adj_bug_count || (2 == adj_bug_count && grid[y][x].opening?)
-                new_grid[y][x] = "#".ord
+              new_grid[y][x] = if 1 == adj_bug_count || (2 == adj_bug_count && grid[y][x].opening?)
+                                 "#".ord
               else
-                new_grid[y][x] = ".".ord
+                                 ".".ord
               end
             end
           end
@@ -140,9 +140,9 @@ class Day24Test < ActiveSupport::TestCase
 
         new_grids
       }
-    }
-    let(:adj_bugs) {
-      ->(x, y, z, grids) {
+    end
+    let(:adj_bugs) do
+      lambda { |x, y, z, grids|
         if mp != x || mp != y
           grid = grids[z]
 
@@ -187,8 +187,8 @@ class Day24Test < ActiveSupport::TestCase
 
                 bugs.sum
               end
-            else
-              1 if grid[_y][_x].bug?
+            elsif grid[_y][_x].bug?
+              1
             end
           end
 
@@ -197,11 +197,11 @@ class Day24Test < ActiveSupport::TestCase
           0
         end
       }
-    }
-    let(:blank_grid) {
+    end
+    let(:blank_grid) do
       l.times.map { l.times.map { ".".ord } }
-    }
-    let(:l) { input_data.size.freeze }
+    end
+    let(:l) { input_data.size }
     let(:mp) { l / 2 }
 
     describe "example" do
@@ -209,11 +209,10 @@ class Day24Test < ActiveSupport::TestCase
       let(:ticks) { 10 }
 
       it "works" do
-        grids    = [ input_data ]
-        found   = {}
+        grids = [ input_data ]
 
         ticks.times do
-          [ :unshift, :push ].each do |m|
+          %i[unshift push].each do |m|
             grids.send(m, blank_grid.dup)
           end
 
@@ -233,11 +232,10 @@ class Day24Test < ActiveSupport::TestCase
       let(:ticks) { 200 }
 
       it "works" do
-        grids    = [ input_data ]
-        found   = {}
+        grids = [ input_data ]
 
         ticks.times do
-          [ :unshift, :push ].each do |m|
+          %i[unshift push].each do |m|
             grids.send(m, blank_grid.dup)
           end
 
@@ -251,24 +249,24 @@ class Day24Test < ActiveSupport::TestCase
     end
   end
 
-  let(:p1_e0) {
+  let(:p1_e0) do
     <<~STR
-    ....#
-    #..#.
-    #..##
-    ..#..
-    #....
+      ....#
+      #..#.
+      #..##
+      ..#..
+      #....
     STR
-  }
-  let(:p1_e0_answer) {
+  end
+  let(:p1_e0_answer) do
     <<~STR
-    .....
-    .....
-    .....
-    #....
-    .#...
+      .....
+      .....
+      .....
+      #....
+      .#...
     STR
-  }
+  end
   let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) { data.lines.map { |line| line.strip.chomp.chars.map(&:ord) } }
 end

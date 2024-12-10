@@ -13,10 +13,10 @@ module Y2020
       next_speak  = nil
 
       n.times do |i|
-        if i < @data.size
-          speak = @data[i]
+        speak = if i < @data.size
+                  @data[i]
         else
-          speak = next_speak
+                  next_speak
         end
 
         # debugger unless @q.nil?

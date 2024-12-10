@@ -9,13 +9,14 @@ module Y2015
       @value  = func.present? ? nil : input.first
     end
 
-    def and(a, b) a & b end
-    def or(a, b) a | b end
-    def lshift(v, n) v << n end
-    def rshift(v, n) v >> n end
-    def wire(v) v end
+    def and(a, b) = a.&(b)
+    def or(a, b) = a.|(b)
+    def lshift(v, n) = v.<<(n)
+    def rshift(v, n) = v.>>(n)
+    def wire(v) = v
+
     def not(v)
-      65536 + (~v)
+      65_536 + ~v
     end
 
     def to_s
@@ -29,9 +30,7 @@ module Y2015
     def resolve(input, value)
       @input = @input.map { |v| v == input ? value : v }
 
-      if @input.all? { |v| Gate.integer_str?(v) }
-        @value = self.send(@func, *@input.map(&:to_i))
-      end
+      @value = send(@func, *@input.map(&:to_i)) if @input.all? { |v| Gate.integer_str?(v) }
 
       @output
     end
@@ -111,7 +110,7 @@ module Y2015
     end
 
     def part2
-      part1_a = self.part1["a"]
+      part1_a = part1["a"]
 
       reset_data
 
@@ -120,7 +119,7 @@ module Y2015
       b_gate = @data.find { |gate| gate.output == "b" }
       b_gate.change_value(part1_a)
 
-      self.part1
+      part1
     end
   end
 end

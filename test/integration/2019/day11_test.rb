@@ -1,9 +1,9 @@
 require "test_helper"
 
 class Day11Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
-  let(:code) {
+  let(:code) do
     robot = ElfComputer.new([], input_data, loop_mode: true)
     dir   = :n
     loc   = [ 0, 0 ]
@@ -14,7 +14,8 @@ class Day11Test < ActiveSupport::TestCase
 
       new_color = robot.run(color).output.last
       break if new_color.nil?
-      new_dir   = robot.run.output.last
+
+      new_dir = robot.run.output.last
       raise if new_dir.nil?
 
       tiles[loc] = new_color
@@ -37,7 +38,7 @@ class Day11Test < ActiveSupport::TestCase
     end
 
     tiles
-  }
+  end
 
   describe "part 1" do
     describe "solution" do
@@ -56,7 +57,6 @@ class Day11Test < ActiveSupport::TestCase
       let(:input) { [ 1 ] }
 
       it "works" do
-        results = []
         tiles   = code.freeze
         min_x   = tiles.keys.map { |k| k.first }.min
         max_x   = tiles.keys.map { |k| k.first }.max

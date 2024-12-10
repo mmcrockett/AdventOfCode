@@ -24,7 +24,7 @@ module Y2020
     end
 
     def part2
-      sorted_ids = self.part1.sort
+      sorted_ids = part1.sort
 
       (0..sorted_ids.size - 2).each do |i|
         return sorted_ids[i] + 1 if sorted_ids[i] + 2 == sorted_ids[i + 1]

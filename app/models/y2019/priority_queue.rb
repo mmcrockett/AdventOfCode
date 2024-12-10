@@ -30,10 +30,11 @@ module Dijkstra
     end
 
     private
+
     def order_queue
       @queue = Hash[@queue.sort_by { |_key, value| value }]
     end
 
-    alias_method :pop, :remove_min
+    alias pop remove_min
   end
 end

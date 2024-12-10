@@ -53,7 +53,7 @@ module Y2020
 
       @data.each do |instruction|
         if instruction.start_with?("mask")
-          mask  = instruction.chars.select { |c| [ "1", "0", "X" ].include?(c) }.join
+          mask  = instruction.chars.select { |c| %w[1 0 X].include?(c) }.join
           omask = or_mask(mask)
           amask = and_mask(mask)
         else
@@ -73,7 +73,7 @@ module Y2020
 
       @data.each do |instruction|
         if instruction.start_with?("mask")
-          mask  = instruction.chars.select { |c| [ "1", "0", "X" ].include?(c) }.join
+          mask  = instruction.chars.select { |c| %w[1 0 X].include?(c) }.join
           omask = or_mask(mask)
           xmask = x_mask(mask)
         else

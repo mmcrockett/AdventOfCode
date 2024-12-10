@@ -1,6 +1,6 @@
 module Dijkstra
   class KShortestPath
-    def initialize(nodes, source, debug = false)
+    def initialize(nodes, source, _debug = false)
       @paths    = []
       @counts   = {}
       @pqueue   = PriorityQueue.new
@@ -37,6 +37,7 @@ module Dijkstra
     end
 
     private
+
     def calculate_paths
       while @pqueue.any?
         u = @pqueue.pop
@@ -46,18 +47,22 @@ module Dijkstra
         u.neighbors.each do |v|
           alt_d = @dist[u] + u.length(v)
 
-          puts "\tNeighbor '#{v.name}' is '#{u.length(v)}' away for total distance of '#{alt_d}' vs '#{@dist[v]}'" if @debug
+          if @debug
+            puts "\tNeighbor '#{v.name}' is '#{u.length(v)}' away for total distance of '#{alt_d}' vs '#{@dist[v]}'"
+          end
 
-          if alt_d < @dist[v]
-            @dist[v] = alt_d
-            @prev[v] = u
-            @pqueue[v] = alt_d
-            puts "\t\tNew distance to #{v.name}, closest to #{v.name} is #{u.name} priority is now #{@pqueue[v]}" if @debug
+          next unless alt_d < @dist[v]
+
+          @dist[v] = alt_d
+          @prev[v] = u
+          @pqueue[v] = alt_d
+          if @debug
+            puts "\t\tNew distance to #{v.name}, closest to #{v.name} is #{u.name} priority is now #{@pqueue[v]}"
           end
         end
       end
 
-      return @dist, @prev
+      [ @dist, @prev ]
     end
   end
 end

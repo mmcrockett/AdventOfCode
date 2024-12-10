@@ -1,13 +1,13 @@
 require "test_helper"
 
 class Day19Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
-  let(:result) {
-    ->(d, x, y) {
+  let(:result) do
+    lambda { |d, x, y|
       ElfComputer.new([ x, y ], d.dup, loop_mode: true).run.output.first
     }
-  }
+  end
 
   describe "part 1" do
     describe "solution" do
@@ -34,15 +34,15 @@ class Day19Test < ActiveSupport::TestCase
 
   describe "part 2" do
     let(:data) { puzzle }
-    let(:n) { 10000 }
+    let(:n) { 10_000 }
     let(:size) { 100 }
-    let(:check_it) {
-      ->(d, x, y) {
+    let(:check_it) do
+      lambda { |d, x, y|
         [ [ x + 99, y ], [ x, y + 99 ] ].all? do |xi, yi|
           1 == result.call(d.dup, xi, yi)
         end
       }
-    }
+    end
 
     describe "solution" do
       it "works" do
@@ -79,13 +79,13 @@ class Day19Test < ActiveSupport::TestCase
 
         answer = (min_x..max_x).find { |x| check_it.call(input_data, x, answer_y) } * 10_000 + answer_y
 
-        assert(50017161 > answer)
-        assert(49017161 > answer)
-        assert(40477161 > answer)
-        assert_not_equal(6141100, answer)
-        assert_not_equal(6721107, answer)
-        assert_not_equal(3950708, answer)
-        assert_equal(6671097, answer)
+        assert(50_017_161 > answer)
+        assert(49_017_161 > answer)
+        assert(40_477_161 > answer)
+        assert_not_equal(6_141_100, answer)
+        assert_not_equal(6_721_107, answer)
+        assert_not_equal(3_950_708, answer)
+        assert_equal(6_671_097, answer)
       end
     end
   end

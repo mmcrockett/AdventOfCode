@@ -3,10 +3,10 @@ module Y2020
     # LOW 1631469
     include FileName
 
-    PART1_ANSWER = 14360655
+    PART1_ANSWER = 14_360_655
 
     def initialize(file: nil, file_ext: nil, preamble_size: 25)
-      @data     = load_data(file_name(file: file, file_ext: file_ext))
+      @data = load_data(file_name(file: file, file_ext: file_ext))
       @preamble_size = preamble_size
     end
 
@@ -22,6 +22,7 @@ module Y2020
         sums = preamble.combination(2).map(&:sum)
 
         return n if sums.exclude?(n)
+
         preamble.shift
         preamble << n
       end

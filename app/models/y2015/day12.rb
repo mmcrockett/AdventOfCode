@@ -37,14 +37,14 @@ module Y2015
 
       if data.is_a?(Hash)
         return 0 if data.each_value.any? { |v| v.try(:red?) }
+
         data.each { |k, v| sum += object_sum_no_red(k) + object_sum_no_red(v) } if data.is_a?(Hash)
-      else
-        data.each { |v| sum += object_sum_no_red(v) } if data.is_a?(Array)
+      elsif data.is_a?(Array)
+        data.each { |v| sum += object_sum_no_red(v) }
       end
 
       sum
     end
-
 
     def part2
       object_sum_no_red(@data)

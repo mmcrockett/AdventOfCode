@@ -2,7 +2,7 @@ module Y2020
   class Day10
     include FileName
 
-    PART1_ANSWER = 14360655
+    PART1_ANSWER = 14_360_655
 
     def initialize(file: nil, file_ext: nil)
       @data = load_data(file_name(file: file, file_ext: file_ext)).map(&:to_i)

@@ -1,8 +1,7 @@
 class Computer
-  attr_reader :acc
-  attr_reader :ip
+  attr_reader :acc, :ip
 
-  alias :accumulator :acc
+  alias accumulator acc
 
   JMP = "jmp"
   ACC = "acc"
@@ -49,7 +48,7 @@ class Computer
     @ip >= @code.size
   end
 
-  def mark_seen(v = @ip)
+  def mark_seen(_v = @ip)
     @seen << @ip
 
     self

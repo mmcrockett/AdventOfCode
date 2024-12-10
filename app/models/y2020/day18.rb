@@ -41,7 +41,7 @@ module Y2020
         end
 
         results[depth] ||= []
-        results[depth]  <<  v unless [ "(", ")" ].include?(v)
+        results[depth] << v unless [ "(", ")" ].include?(v)
       end
 
       results.values.map do |values|
@@ -64,16 +64,16 @@ module Y2020
           e_i  = next_o + 1
           slice_start = s_i - 1
           slice_end   = e_i + 1
-          v    = data[s_i].to_i.send(operator, data[e_i].to_i)
+          v = data[s_i].to_i.send(operator, data[e_i].to_i)
 
-          if data.size == 3
-            data = [ v ]
+          data = if data.size == 3
+                   [ v ]
           elsif slice_start.negative?
-            data = [ v ] + data[slice_end..-1]
+                   [ v ] + data[slice_end..-1]
           elsif slice_end >= data.size
-            data = data[0..slice_start] + [ v ]
+                   data[0..slice_start] + [ v ]
           else
-            data = data[0..slice_start] + [ v ] + data[slice_end..-1]
+                   data[0..slice_start] + [ v ] + data[slice_end..-1]
           end
 
           next_o = data.index(operator)
@@ -98,7 +98,7 @@ module Y2020
         end
 
         results[depth] ||= []
-        results[depth]  <<  v unless [ "(", ")" ].include?(v)
+        results[depth] << v unless [ "(", ")" ].include?(v)
       end
 
       results.values.map do |values|

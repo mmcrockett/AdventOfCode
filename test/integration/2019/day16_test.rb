@@ -1,16 +1,16 @@
 require "test_helper"
 
 class Day16Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
-  let(:multiple) {
-    ->(idx, size) {
+  let(:multiple) do
+    lambda { |idx, size|
       mult = [ 0, 1, 0, -1 ].freeze
 
-      (mult.map { |v| idx.times.map { |i| v } }.flatten * (size / mult.size + 1))[1..-1]
+      (mult.map { |v| idx.times.map { |_i| v } }.flatten * (size / mult.size + 1))[1..-1]
     }
-  }
-  let(:code) {
+  end
+  let(:code) do
     output = input_data.dup
     input  = nil
 
@@ -28,7 +28,7 @@ class Day16Test < ActiveSupport::TestCase
     end
 
     output
-  }
+  end
 
   describe "part 1" do
     let(:n) { 100 }
@@ -77,10 +77,10 @@ class Day16Test < ActiveSupport::TestCase
 
   describe "part 2" do
     let(:n) { 100 }
-    let(:x) { 10000 }
+    let(:x) { 10_000 }
     let(:offset) { input_data.first(7).join("").to_i }
     let(:reduced_data) { input_data[offset..-1] }
-    let(:code) {
+    let(:code) do
       d = reduced_data.dup
 
       n.times do
@@ -90,7 +90,7 @@ class Day16Test < ActiveSupport::TestCase
       end
 
       d
-    }
+    end
 
     describe "example 0" do
       let(:data) { p2_e0 * x }

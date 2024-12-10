@@ -1,8 +1,8 @@
 module Y2020
   class Day25
-    EXAMPLE_1 = [ 5764801, 17807724 ]
-    INPUT = [ 12090988, 240583 ]
-    DIV_VALUE = 20201227
+    EXAMPLE_1 = [ 5_764_801, 17_807_724 ]
+    INPUT = [ 12_090_988, 240_583 ]
+    DIV_VALUE = 20_201_227
 
     def initialize(input = INPUT)
       @input = input

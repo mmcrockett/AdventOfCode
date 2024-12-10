@@ -19,7 +19,6 @@ module Y2015
     def part1
       cities = {}
       connections = []
-      min_value = BigDecimal::INFINITY
 
       @raw_data.each do |data|
         [ data.a, data.b ].each { |name| cities[name] ||= Node.new(name) }
@@ -28,7 +27,7 @@ module Y2015
       end
 
       cities.values.permutation.map do |order|
-        distance = (1..order.size - 1).map do |j|
+        (1..order.size - 1).map do |j|
           city_a = order[j - 1]
           city_b = order[j]
 
@@ -42,7 +41,6 @@ module Y2015
     def part2
       cities = {}
       connections = []
-      min_value = BigDecimal::INFINITY
 
       @raw_data.each do |data|
         [ data.a, data.b ].each { |name| cities[name] ||= Node.new(name) }
@@ -51,7 +49,7 @@ module Y2015
       end
 
       cities.values.permutation.map do |order|
-        distance = (1..order.size - 1).map do |j|
+        (1..order.size - 1).map do |j|
           city_a = order[j - 1]
           city_b = order[j]
 

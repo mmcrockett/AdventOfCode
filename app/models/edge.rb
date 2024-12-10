@@ -1,7 +1,7 @@
 class Edge
   attr_reader :value
 
-  alias :weight :value
+  alias weight value
 
   def initialize(node_a: nil, node_b: nil, value: nil, weight: nil, to: nil, from: nil)
     @node_a = node_a || to

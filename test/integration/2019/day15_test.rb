@@ -1,27 +1,27 @@
 require "test_helper"
 
 class Day15Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   let(:ec) { ElfComputer.new([], input_data, loop_mode: true) }
-  let(:directions) {
+  let(:directions) do
     {
       1 => [ 0, 1 ],
       2 => [ 0, -1 ],
       3 => [ -1, 0 ],
       4 => [ 1, 0 ]
     }
-  }
-  let(:output) {
+  end
+  let(:output) do
     {
       0 => "#",
       1 => ".",
       2 => "O"
     }
-  }
+  end
   let(:start) { [ 50, 50 ] }
-  let(:print_map) {
-    ->(map, starting_x, ending_x, starting_y, ending_y) {
+  let(:print_map) do
+    lambda { |map, starting_x, ending_x, starting_y, ending_y|
       (starting_y..ending_y).each do |y|
         puts ""
 
@@ -32,7 +32,7 @@ class Day15Test < ActiveSupport::TestCase
 
       puts ""
     }
-  }
+  end
 
   describe "part 1" do
     describe "solution" do
@@ -45,7 +45,7 @@ class Day15Test < ActiveSupport::TestCase
         map    = []
         (x, y) = start
         result = 1
-        failsafe = 100000
+        failsafe = 100_000
         map[y]  ||= []
         map[y][x] = "B"
         starting_y = y
@@ -54,10 +54,10 @@ class Day15Test < ActiveSupport::TestCase
         ending_x = x
 
         while answer.nil? && failsafe > 0
-          next_i = directions.find { |k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
+          next_i = directions.find { |_k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
 
           if next_i.nil?
-            next_i = directions.find { |k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
+            next_i = directions.find { |_k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
             map[y][x] = "X"
           end
 
@@ -102,7 +102,7 @@ class Day15Test < ActiveSupport::TestCase
         answer_i = 0
 
         while "O" != map[y][x]
-          next_i = directions.find { |k, v| [ ".", "O" ].include?(map[y + v.last][x + v.first]) }
+          next_i = directions.find { |_k, v| [ ".", "O" ].include?(map[y + v.last][x + v.first]) }
           map[y][x] = "z"
 
           debugger if next_i.nil?
@@ -113,7 +113,7 @@ class Day15Test < ActiveSupport::TestCase
           answer_i += 1
         end
 
-        assert(19970 > answer_i)
+        assert(19_970 > answer_i)
         assert(30 < answer_i)
         assert_equal(298, answer_i)
       end
@@ -131,7 +131,7 @@ class Day15Test < ActiveSupport::TestCase
         map    = []
         (x, y) = start
         result = 1
-        failsafe = 100000
+        failsafe = 100_000
         map[y]  ||= []
         map[y][x] = "B"
         starting_y = y
@@ -140,10 +140,10 @@ class Day15Test < ActiveSupport::TestCase
         ending_x = x
 
         while answer.nil? && failsafe > 0
-          next_i = directions.find { |k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
+          next_i = directions.find { |_k, v| map[y + v.last].nil? || map[y + v.last][x + v.first].nil? }
 
           if next_i.nil?
-            next_i = directions.find { |k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
+            next_i = directions.find { |_k, v| false == [ output[0], "X" ].include?(map[y + v.last][x + v.first]) }
             map[y][x] = "X"
           end
 
@@ -197,7 +197,10 @@ class Day15Test < ActiveSupport::TestCase
           oxygen[t].each do |x, y|
             map[y][x] = "o"
 
-            directions.select { |k, v| false == [ "#", nil, "o" ].include?(map[y + v.last][x + v.first]) }.map { |k, v| [ x + v.first, y + v.last ] }.each do |next_oxygen|
+            directions.select do |_k, v|
+              false == [ "#", nil,
+                        "o" ].include?(map[y + v.last][x + v.first])
+            end.map { |_k, v| [ x + v.first, y + v.last ] }.each do |next_oxygen|
               oxygen[next_t] << next_oxygen
             end
           end

@@ -41,7 +41,7 @@ module Y2015
           [ p0, p1 ].permutation(2).find { |couple| r = pairs[couple.join("_")] }
 
           if r.nil?
-            score  = BigDecimal::INFINITY
+            score = BigDecimal::INFINITY
             break
           else
             score += r

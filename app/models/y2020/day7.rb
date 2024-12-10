@@ -7,7 +7,7 @@ module Y2020
     end
 
     def load_data(file)
-      bags   = {}
+      bags = {}
 
       File.open(file).each_line.map(&:chomp).each do |line|
         line = line.gsub("bags", "").gsub("bag", "").gsub(" .", "")
@@ -54,10 +54,10 @@ module Y2020
       count = 0
 
       contents.each do |other_bag|
-        if @data[other_bag.last].blank?
-          count += other_bag.first
+        count += if @data[other_bag.last].blank?
+                   other_bag.first
         else
-          count += other_bag.first + other_bag.first * deep_count(@data[other_bag.last])
+                   other_bag.first + other_bag.first * deep_count(@data[other_bag.last])
         end
       end
 

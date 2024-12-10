@@ -14,8 +14,7 @@ module Y2020
       y = 0
       x = 0
 
-      while
-        x += 3
+      while x += 3
         y += 1
 
         break if y >= height
@@ -36,8 +35,7 @@ module Y2020
         x  = 0
         tn = 0
 
-        while
-          x += x_n
+        while x += x_n
           y += y_n
 
           break if y >= height

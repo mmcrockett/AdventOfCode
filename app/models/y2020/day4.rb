@@ -3,16 +3,16 @@ module Y2020
     include FileName
 
     REQUIRED_FIELDS = %w[
-    byr
-    iyr
-    eyr
-    hgt
-    hcl
-    ecl
-    pid
+      byr
+      iyr
+      eyr
+      hgt
+      hcl
+      ecl
+      pid
     ]
     OPTIONAL_FIELDS = %w[
-    cid
+      cid
     ]
 
     def initialize(file: nil, file_ext: nil)

@@ -2,7 +2,7 @@ require "test_helper"
 require "highline/import"
 
 class Day25Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
   describe "part 1" do
     describe "solution" do
@@ -59,17 +59,21 @@ class Day25Test < ActiveSupport::TestCase
           ec.run(next_command.to_elfcommand)
         end
 
-        %w[south south west north north north].each { |command| ec.run(command.to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
-        items.each { |item| ec.run("drop #{item}".to_elfcommand); puts "#{ec.ascii_output}" if debug_p }
+        %w[south south west north north north].each do |command|
+          ec.run(command.to_elfcommand)
+          puts "#{ec.ascii_output}" if debug_p
+        end
+        items.each do |item|
+          ec.run("drop #{item}".to_elfcommand)
+          puts "#{ec.ascii_output}" if debug_p
+        end
 
         items.dup.each do |item|
           [ "take #{item}", "east", "drop #{item}" ].each do |c|
             ec.run(c.to_elfcommand)
             result = ec.ascii_output
 
-            if result.include?("Droids on this ship are lighter than the detected value")
-              items.delete(item)
-            end
+            items.delete(item) if result.include?("Droids on this ship are lighter than the detected value")
 
             puts "#{result}" if debug_p
           end
@@ -77,8 +81,10 @@ class Day25Test < ActiveSupport::TestCase
 
         (2..6).each do |n|
           break if passcode.present?
+
           items.permutation(n) do |items|
             break if passcode.present?
+
             commands = items.map { |item| [ "take #{item}", "drop #{item}" ] }.flatten.sort.reverse
             commands.insert(items.size, "east")
 
@@ -109,7 +115,7 @@ class Day25Test < ActiveSupport::TestCase
         end
 
         assert_equal(19, rooms.size)
-        assert_equal(134227456, passcode.to_i)
+        assert_equal(134_227_456, passcode.to_i)
       end
     end
   end
@@ -120,7 +126,7 @@ class Day25Test < ActiveSupport::TestCase
 
       it "works" do
         skip
-        assert_equal(1139528802, answer)
+        assert_equal(1_139_528_802, answer)
       end
     end
   end

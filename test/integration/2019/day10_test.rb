@@ -1,9 +1,9 @@
 require "test_helper"
 
 class Day10Test < ActiveSupport::TestCase
-  PUZZLE_FILE = "#{self.name.underscore}.txt"
+  PUZZLE_FILE = "#{name.underscore}.txt"
 
-  let(:as_coords) {
+  let(:as_coords) do
     results = []
 
     input_data.each_with_index do |line, y|
@@ -13,7 +13,7 @@ class Day10Test < ActiveSupport::TestCase
     end
 
     results
-  }
+  end
 
   describe "helpers" do
     it "can create a line" do
@@ -58,7 +58,7 @@ class Day10Test < ActiveSupport::TestCase
   end
 
   describe "p1" do
-    let(:code) {
+    let(:code) do
       max = 0
       answers = {}
 
@@ -83,7 +83,7 @@ class Day10Test < ActiveSupport::TestCase
       end
 
       [ max, answers[max] ]
-    }
+    end
 
     describe "e0" do
       let(:data) { p1_e0 }
@@ -136,8 +136,7 @@ class Day10Test < ActiveSupport::TestCase
   end
 
   describe "part 2" do
-    let(:code) {
-      max = 0
+    let(:code) do
       groupings = {}
       destroyed = []
       ordered   = []
@@ -151,7 +150,7 @@ class Day10Test < ActiveSupport::TestCase
         if 0 == slope[:x]
           key = 0 if slope[:y].negative?
           key = 180 if slope[:y].positive?
-          slope = 9999999
+          slope = 9_999_999
         elsif 0 == slope[:y]
           key = 90 if slope[:x].positive?
           key = 270 if slope[:x].negative?
@@ -170,8 +169,16 @@ class Day10Test < ActiveSupport::TestCase
 
       groupings.keys.sort.each do |k0|
         subkeys = groupings[k0].keys if 0 == (k0 % 90)
-        subkeys = groupings[k0].keys.sort_by { |slope| (slope[:y].to_f/slope[:x]).abs }.reverse if [ 45, 225 ].include?(k0)
-        subkeys = groupings[k0].keys.sort_by { |slope| (slope[:x].to_f/slope[:y]).abs }.reverse if [ 135, 315 ].include?(k0)
+        if [ 45, 225 ].include?(k0)
+          subkeys = groupings[k0].keys.sort_by do |slope|
+            (slope[:y].to_f / slope[:x]).abs
+          end.reverse
+        end
+        if [ 135, 315 ].include?(k0)
+          subkeys = groupings[k0].keys.sort_by do |slope|
+            (slope[:x].to_f / slope[:y]).abs
+          end.reverse
+        end
 
         subkeys.each do |k1|
           ordered << groupings[k0][k1]
@@ -187,7 +194,7 @@ class Day10Test < ActiveSupport::TestCase
       end
 
       destroyed
-    }
+    end
 
     describe "e4" do
       let(:data) { p1_e4 }
@@ -224,7 +231,7 @@ class Day10Test < ActiveSupport::TestCase
     end
   end
 
-  let(:p1_e0) {
+  let(:p1_e0) do
     <<-STR
     .#..#
     .....
@@ -232,8 +239,8 @@ class Day10Test < ActiveSupport::TestCase
     ....#
     ...##
     STR
-  }
-  let(:p1_e1) {
+  end
+  let(:p1_e1) do
     <<-STR
     ......#.#.
     #..#.#....
@@ -246,8 +253,8 @@ class Day10Test < ActiveSupport::TestCase
     ##...#..#.
     .#....####
     STR
-  }
-  let(:p1_e2) {
+  end
+  let(:p1_e2) do
     <<-STR
     #.#...#.#.
     .###....#.
@@ -260,8 +267,8 @@ class Day10Test < ActiveSupport::TestCase
     ......#...
     .####.###.
     STR
-  }
-  let(:p1_e3) {
+  end
+  let(:p1_e3) do
     <<-STR
     .#..#..###
     ####.###.#
@@ -274,8 +281,8 @@ class Day10Test < ActiveSupport::TestCase
     .##...##.#
     .....#.#..
     STR
-  }
-  let(:p1_e4) {
+  end
+  let(:p1_e4) do
     <<-STR
     .#..##.###...#######
     ##.############..##.
@@ -298,7 +305,7 @@ class Day10Test < ActiveSupport::TestCase
     #.#.#.#####.####.###
     ###.##.####.##.#..##
     STR
-  }
+  end
   let(:puzzle) { read_test_file(File.join("aoc", PUZZLE_FILE)) }
   let(:input_data) { data.lines.map { |line| line.chomp.strip.chars.map { |c| c == "#" } } }
 end

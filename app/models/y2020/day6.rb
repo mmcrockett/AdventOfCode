@@ -1,6 +1,6 @@
 class String
   def xor(other)
-    my_chars = self.chars
+    my_chars = chars
     new_str  = ""
 
     other.chars.each do |other_char|
@@ -25,6 +25,7 @@ module Y2020
       File.open(file).each_line.map(&:chomp).each do |line|
         groups << [] if line.blank? || groups.blank?
         next if line.blank?
+
         groups.last << line
       end
 
